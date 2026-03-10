@@ -43,6 +43,17 @@ impl AppError {
     pub fn enumeration_failed(msg: impl Into<String>) -> Self {
         Self::EnumerationFailed(msg.into())
     }
+
+    /// Create an EnumerationFailed error for platform-specific failures
+    ///
+    /// Use this for platform API failures such as:
+    /// - X11 connection failures on Linux
+    /// - CGWindowListCopyWindowInfo returning NULL on macOS
+    /// - EnumWindows failing on Windows
+    /// - Permission denied errors during window enumeration
+    pub fn platform_error(msg: impl Into<String>) -> Self {
+        Self::EnumerationFailed(msg.into())
+    }
 }
 
 #[cfg(test)]
@@ -92,5 +103,30 @@ mod tests {
         // Should contain the current OS name
         let msg = err.to_string();
         assert!(msg.contains(std::env::consts::OS));
+    }
+
+    #[test]
+    fn test_platform_error_display() {
+        let err = AppError::platform_error("X11 connection refused");
+        assert_eq!(
+            err.to_string(),
+            "Failed to enumerate windows: X11 connection refused"
+        );
+    }
+
+    #[test]
+    fn test_platform_error_creates_enumeration_failed() {
+        // platform_error is an alias for enumeration_failed with clearer semantics
+        let err = AppError::platform_error("CGWindowListCopyWindowInfo returned NULL");
+        assert!(err.to_string().starts_with("Failed to enumerate windows:"));
+    }
+
+    #[test]
+    fn test_platform_error_with_permission_denied() {
+        let err = AppError::platform_error("permission denied");
+        assert_eq!(
+            err.to_string(),
+            "Failed to enumerate windows: permission denied"
+        );
     }
 }
