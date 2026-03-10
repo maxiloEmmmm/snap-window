@@ -7,3 +7,4 @@ pub mod cli;
 pub mod error;
 pub mod platform;
 pub mod window;
+pub mod window_service;

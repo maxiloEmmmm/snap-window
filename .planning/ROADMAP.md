@@ -80,7 +80,10 @@
 4. When target window not found, user sees clear error message and auto-list of available windows
 5. Name matching is case-insensitive and matches partial titles
 
-**Plans:** TBD
+**Plans:** 1 plan
+
+**Plan list:**
+- [ ] 03-01-PLAN.md — Window service module with targeting functions and main.rs refactor (WIN-02, WIN-03, WIN-04, WIN-05, ERR-02)
 
 ---
 
@@ -128,9 +131,9 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/3 | Complete    | 2026-03-10 |
 | 2. Window Discovery | 1/2 | In Progress|  |
-| 3. Window Targeting | 0/3 | Not started | - |
-| 4. Screenshot Capture | 0/3 | Not started | - |
-| 5. Highlight Mode | 0/3 | Not started | - |
+| 3. Window Targeting | 0/1 | Planning | - |
+| 4. Screenshot Capture | 0/? | Not started | - |
+| 5. Highlight Mode | 0/? | Not started | - |
 
 ---
 
@@ -173,4 +176,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-10 (Phase 2 plans created)*
+*Last updated: 2026-03-10 (Phase 3 planned)*
