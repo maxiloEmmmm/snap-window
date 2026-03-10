@@ -34,7 +34,7 @@
 4. User sees timestamped default output path when no `--output` specified
 5. Project compiles on all target platforms (Windows, macOS, Linux) with conditional compilation
 
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 **Plan list:**
 - [x] 01-01-PLAN.md — Project scaffolding and CLI structure (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, CLI-06, CLI-08)
@@ -57,7 +57,11 @@
 3. On unsupported platforms, user sees clear error message instead of crash
 4. Window list updates in real-time (reflects current window state)
 
-**Plans:** TBD
+**Plans:** 1/2 plans executed
+
+**Plan list:**
+- [ ] 02-01-PLAN.md — Platform window enumeration (WIN-01) - Windows, macOS, Linux implementations
+- [ ] 02-02-PLAN.md — Platform error handling and tests (WIN-06) - Compile-time guards, runtime errors, comprehensive tests
 
 ---
 
@@ -122,8 +126,8 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/3 | In Progress | 2026-03-10 |
-| 2. Window Discovery | 0/2 | Not started | - |
+| 1. Foundation | 2/3 | Complete    | 2026-03-10 |
+| 2. Window Discovery | 1/2 | In Progress|  |
 | 3. Window Targeting | 0/3 | Not started | - |
 | 4. Screenshot Capture | 0/3 | Not started | - |
 | 5. Highlight Mode | 0/3 | Not started | - |
@@ -169,4 +173,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-10 (Plan 01-02 complete)*
+*Last updated: 2026-03-10 (Phase 2 plans created)*
