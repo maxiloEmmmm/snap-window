@@ -2,8 +2,8 @@
 name = "snap-window"
 version = "0.1.0"
 edition = "2021"
-authors = ["snap-window contributors"]
 description = "Cross-platform CLI window screenshot tool"
+authors = ["snap-window contributors"]
 license = "MIT"
 repository = "https://github.com/example/snap-window"
 
@@ -20,8 +20,3 @@ chrono = "0.4"
 [dev-dependencies]
 assert_cmd = "2.0"
 predicates = "3.1"
-
-[profile.release]
-opt-level = 3
-lto = true
-strip = true
