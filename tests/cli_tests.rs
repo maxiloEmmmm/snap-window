@@ -139,32 +139,49 @@ fn test_highlight_flag() {
     );
 }
 
-/// Test that invalid index produces error
+/// Test that invalid index produces error and auto-lists available windows on stderr
 #[test]
 fn test_invalid_index() {
     let mut cmd = Command::cargo_bin("snap-window").unwrap();
     cmd.arg("--index").arg("999");
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("Invalid").or(predicate::str::contains("index")));
+        .stderr(predicate::str::contains("Invalid").or(predicate::str::contains("index")))
+        .stderr(predicate::str::contains("Available windows"));
 }
 
-/// Test that invalid pid produces not found error
+/// Test that invalid pid produces not found error and auto-lists available windows on stderr
 #[test]
 fn test_invalid_pid() {
     let mut cmd = Command::cargo_bin("snap-window").unwrap();
     cmd.arg("--pid").arg("99999");
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("not found").or(predicate::str::contains("PID")));
+        .stderr(predicate::str::contains("not found").or(predicate::str::contains("PID")))
+        .stderr(predicate::str::contains("Available windows"));
 }
 
-/// Test that invalid window name produces not found error
+/// Test that invalid window name produces not found error and auto-lists available windows on stderr
 #[test]
 fn test_invalid_window() {
     let mut cmd = Command::cargo_bin("snap-window").unwrap();
     cmd.arg("--window").arg("NonExistentWindowXYZ");
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("not found"));
+        .stderr(predicate::str::contains("not found"))
+        .stderr(predicate::str::contains("Available windows"));
+}
+
+/// Test that case-insensitive window search works (WIN-02 smoke test)
+/// A lowercase search for a non-existent window should fail gracefully
+#[test]
+fn test_window_flag_case_insensitive_not_found() {
+    // Even lowercase search should produce "not found" (not a crash/panic)
+    // and show available windows on stderr
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--window").arg("nonexistentwindowxyz_testonly");
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("not found"))
+        .stderr(predicate::str::contains("Available windows"));
 }
