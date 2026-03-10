@@ -54,6 +54,7 @@ pub struct Mode {
 ///
 /// ```
 /// use std::path::PathBuf;
+/// use snap_window::cli::resolve_output_path;
 /// // With user-provided path
 /// let path = resolve_output_path(Some(PathBuf::from("my_capture.png")));
 /// assert_eq!(path, PathBuf::from("my_capture.png"));
