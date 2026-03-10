@@ -3,7 +3,7 @@ use clap::Parser;
 
 mod cli;
 mod error;
-mod platform;
+pub mod platform;
 mod window;
 
 use cli::{resolve_output_path, Cli, Mode};

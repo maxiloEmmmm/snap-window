@@ -9,7 +9,7 @@
 
 ## Phases
 
-- [~] **Phase 1: Foundation** - Rust project scaffolding, CLI argument parsing, error handling framework (1/3 plans complete)
+- [~] **Phase 1: Foundation** - Rust project scaffolding, CLI argument parsing, error handling framework (2/3 plans complete)
 - [ ] **Phase 2: Window Discovery** - Cross-platform window enumeration and listing with indices
 - [ ] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling
 - [ ] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths
@@ -38,7 +38,7 @@
 
 **Plan list:**
 - [x] 01-01-PLAN.md — Project scaffolding and CLI structure (CLI-01, CLI-02, CLI-03, CLI-04, CLI-05, CLI-06, CLI-08)
-- [ ] 01-02-PLAN.md — Error handling framework and dynamic defaults (CLI-07, ERR-01, ERR-02, ERR-03)
+- [x] 01-02-PLAN.md — Error handling framework and dynamic defaults (CLI-07, ERR-01, ERR-02, ERR-03)
 - [ ] 01-03-PLAN.md — Cross-platform compilation and integration tests (platform support, test infrastructure)
 
 ---
@@ -122,7 +122,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/3 | In Progress | 2026-03-10 |
+| 1. Foundation | 2/3 | In Progress | 2026-03-10 |
 | 2. Window Discovery | 0/2 | Not started | - |
 | 3. Window Targeting | 0/3 | Not started | - |
 | 4. Screenshot Capture | 0/3 | Not started | - |
@@ -169,4 +169,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-10 (Plan 01-01 complete)*
+*Last updated: 2026-03-10 (Plan 01-02 complete)*

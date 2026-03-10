@@ -7,6 +7,10 @@ authors = ["snap-window contributors"]
 license = "MIT"
 repository = "https://github.com/example/snap-window"
 
+[lib]
+name = "snap_window"
+path = "src/lib.rs"
+
 [[bin]]
 name = "snap-window"
 path = "src/main.rs"

@@ -1,59 +1,48 @@
-use anyhow::Result;
-use crate::window::WindowInfo;
+//! Platform-specific window enumeration
+//!
+//! This module provides cross-platform window enumeration using conditional compilation.
+//! Each platform (Windows, macOS, Linux) has its own implementation module that is
+//! compiled only when targeting that platform.
+//!
+//! # Supported Platforms
+//!
+//! - **Windows**: Uses Windows API via windows-rs crate (future implementation)
+//! - **macOS**: Uses Core Graphics via objc2-core-graphics (future implementation)
+//! - **Linux**: Uses X11 via x11rb crate with Wayland fallback (future implementation)
+//!
+//! # Adding New Platforms
+//!
+//! To add support for a new platform:
+//! 1. Create a new file: `src/platform/{platform}.rs`
+//! 2. Add `#[cfg(target_os = "...")]` attributes
+//! 3. Implement the `list_windows()` function
+//! 4. Add conditional imports below
+//!
+//! # Conditional Compilation
+//!
+//! The `#[cfg(target_os = "...")]` attribute ensures only the relevant platform
+//! module is compiled for each target. This prevents compilation errors from
+//! platform-specific APIs on unsupported platforms.
 
-/// List all visible windows on the system
-///
-/// Returns a vector of WindowInfo structs sorted by index.
-/// On unsupported platforms, returns an error.
-pub fn list_windows() -> Result<Vec<WindowInfo>> {
-    // Mock implementation for foundation phase
-    // Returns sample windows for testing the CLI
-    let mock_windows = vec![
-        WindowInfo::new(
-            0,
-            1001,
-            "Terminal",
-            1234,
-            "Terminal.app",
-            100,
-            100,
-            800,
-            600,
-        ),
-        WindowInfo::new(
-            1,
-            1002,
-            "Google Chrome",
-            5678,
-            "Google Chrome",
-            200,
-            150,
-            1200,
-            800,
-        ),
-        WindowInfo::new(
-            2,
-            1003,
-            "Visual Studio Code",
-            9012,
-            "Code",
-            50,
-            50,
-            1400,
-            900,
-        ),
-        WindowInfo::new(
-            3,
-            1004,
-            "Safari",
-            3456,
-            "Safari",
-            300,
-            200,
-            1000,
-            700,
-        ),
-    ];
-    
-    Ok(mock_windows)
-}
+// Windows platform support
+#[cfg(target_os = "windows")]
+mod windows;
+#[cfg(target_os = "windows")]
+pub use windows::list_windows;
+
+// macOS platform support
+#[cfg(target_os = "macos")]
+mod macos;
+#[cfg(target_os = "macos")]
+pub use macos::list_windows;
+
+// Linux platform support
+#[cfg(target_os = "linux")]
+mod linux;
+#[cfg(target_os = "linux")]
+pub use linux::list_windows;
+
+// Unsupported platform fallback
+// This provides a compile-time error for unsupported platforms
+#[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+compile_error!("Unsupported platform. Only Windows, macOS, and Linux are supported.");

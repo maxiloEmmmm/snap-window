@@ -13,7 +13,7 @@
 - [x] **CLI-04**: CLI accepts `--output <path>` for configurable screenshot path
 - [x] **CLI-05**: CLI accepts `--list` to enumerate all windows with indices
 - [x] **CLI-06**: CLI accepts `--highlight <index>` to add red border to window (no screenshot)
-- [ ] **CLI-07**: Default output path uses timestamped filename in current directory
+- [x] **CLI-07**: Default output path uses timestamped filename in current directory
 - [x] **CLI-08**: Window list displays: index, window title, PID, application name
 
 ### Window Operations
@@ -49,9 +49,9 @@
 
 ### Error Handling
 
-- [ ] **ERR-01**: Clear error message when target window not found
-- [ ] **ERR-02**: Auto-list all available windows on error
-- [ ] **ERR-03**: Clear error when platform unsupported
+- [x] **ERR-01**: Clear error message when target window not found
+- [x] **ERR-02**: Auto-list all available windows on error
+- [x] **ERR-03**: Clear error when platform unsupported
 - [ ] **ERR-04**: Clear error when required permissions missing (macOS Screen Recording)
 
 ## v2 Requirements
@@ -90,7 +90,7 @@
 | CLI-04 | Phase 1 | Complete |
 | CLI-05 | Phase 1 | Complete |
 | CLI-06 | Phase 1 | Complete |
-| CLI-07 | Phase 1 | Pending |
+| CLI-07 | Phase 1 | Complete |
 | CLI-08 | Phase 1 | Complete |
 | WIN-01 | Phase 2 | Pending |
 | WIN-02 | Phase 3 | Pending |
@@ -111,9 +111,9 @@
 | JSON-03 | Phase 5 | Pending |
 | JSON-04 | Phase 5 | Pending |
 | JSON-05 | Phase 5 | Pending |
-| ERR-01 | Phase 1 | Pending |
-| ERR-02 | Phase 3 | Pending |
-| ERR-03 | Phase 1 | Pending |
+| ERR-01 | Phase 1 | Complete |
+| ERR-02 | Phase 1 | Complete |
+| ERR-03 | Phase 1 | Complete |
 | ERR-04 | Phase 4 | Pending |
 
 **Coverage:**
@@ -124,4 +124,4 @@
 ---
 
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-10 after plan 01-01 complete*
+*Last updated: 2026-03-10 after plan 01-02 complete*

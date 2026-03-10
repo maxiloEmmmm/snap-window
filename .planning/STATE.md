@@ -3,8 +3,8 @@
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
 **Current Phase:** 01-foundation
-**Current Plan:** 01-02
-**Status:** Plan 01-01 complete - CLI foundation with mock window enumeration
+**Current Plan:** 01-03
+**Status:** Plan 01-02 complete - Error handling with anyhow/thiserror and dynamic defaults
 **Last Updated:** 2026-03-10
 
 ---
@@ -14,7 +14,7 @@
 ```
 [░░░░░░░░░░] 5% - Phase 1 in progress
 
-Phase 1: Foundation         [██░░░░░░░░] 33% - 1/3 plans complete
+Phase 1: Foundation         [████░░░░░░] 67% - 2/3 plans complete
 Phase 2: Window Discovery   [░░░░░░░░░░] 0% - Not started
 Phase 3: Window Targeting   [░░░░░░░░░░] 0% - Not started
 Phase 4: Screenshot Capture [░░░░░░░░░░] 0% - Not started
@@ -72,6 +72,9 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-10 | 5-phase roadmap | Fine granularity, natural delivery boundaries |
 | 2026-03-10 | Clap derive with argument groups | Clean CLI with mutually exclusive modes enforced at parse time |
 | 2026-03-10 | Mock window data for foundation | Enables CLI testing without platform-specific APIs |
+| 2026-03-10 | Hybrid error handling (anyhow + thiserror) | anyhow for propagation, thiserror for domain errors |
+| 2026-03-10 | Auto-list on lookup failures | Better UX - show available windows when target not found |
+| 2026-03-10 | Timestamped default output paths | Compact YYYYMMDD_HHMMSS format for sortable filenames |
 
 ### Open Questions
 
@@ -91,8 +94,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 01-01 - CLI foundation with mock window enumeration
-**Next Action:** Execute plan 01-02
+**Last Action:** Completed plan 01-02 - Error handling with anyhow/thiserror and dynamic defaults
+**Next Action:** Execute plan 01-03
 **Context Valid Until:** 2026-03-11 (assumed)
 
 ### Key Files
@@ -109,6 +112,7 @@ None currently.
 | Phase | Started | Completed | Notes |
 |-------|---------|-----------|-------|
 | 01-foundation | 2026-03-10 | - | Plan 01 complete: CLI foundation with mock window enumeration |
+| 01-foundation | 2026-03-10 | - | Plan 02 complete: Error handling with anyhow/thiserror and dynamic defaults |
 
 ---
 
