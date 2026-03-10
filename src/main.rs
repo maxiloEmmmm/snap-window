@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::Parser;
 
 mod cli;
@@ -7,8 +7,16 @@ mod platform;
 mod window;
 
 use cli::{resolve_output_path, Cli, Mode};
+use error::AppError;
 
-fn main() -> Result<()> {
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
+}
+
+fn run() -> Result<()> {
     let cli = Cli::parse();
 
     // Resolve output path with timestamped default if not provided
@@ -16,7 +24,8 @@ fn main() -> Result<()> {
 
     match cli.mode {
         Mode { list: true, .. } => {
-            let windows = platform::list_windows()?;
+            let windows = platform::list_windows()
+                .context("Failed to enumerate windows")?;
             for window in windows {
                 println!("{}", window);
             }
@@ -24,19 +33,91 @@ fn main() -> Result<()> {
             eprintln!("\nDefault output path (when not specified): {}", output_path.display());
         }
         Mode { window: Some(name), .. } => {
-            println!("Window targeting by name: {} (not implemented)", name);
-            println!("Output path: {}", output_path.display());
+            // Attempt to find window by name - for now, simulate not found to demonstrate error handling
+            let windows = platform::list_windows()
+                .context("Failed to enumerate windows")?;
+
+            // Check if window exists (mock: always fail for now to demonstrate error handling)
+            let found = windows.iter().find(|w| w.title.contains(&name) || w.app_name.contains(&name));
+
+            match found {
+                Some(window) => {
+                    println!("Found window: {}", window);
+                    println!("Output path: {}", output_path.display());
+                }
+                None => {
+                    // Return WindowNotFound error and trigger auto-list (ERR-02 requirement)
+                    return Err(AppError::window_not_found(&name))
+                        .with_context(|| {
+                            // Print available windows before returning error
+                            eprintln!("\nAvailable windows:");
+                            for window in &windows {
+                                eprintln!("  {}", window);
+                            }
+                            format!("Window '{}' not found", name)
+                        });
+                }
+            }
         }
         Mode { pid: Some(pid), .. } => {
-            println!("Window targeting by PID: {} (not implemented)", pid);
-            println!("Output path: {}", output_path.display());
+            let windows = platform::list_windows()
+                .context("Failed to enumerate windows")?;
+
+            let found = windows.iter().find(|w| w.pid == pid);
+
+            match found {
+                Some(window) => {
+                    println!("Found window: {}", window);
+                    println!("Output path: {}", output_path.display());
+                }
+                None => {
+                    return Err(AppError::window_not_found(format!("PID {}", pid)))
+                        .with_context(|| {
+                            eprintln!("\nAvailable windows:");
+                            for window in &windows {
+                                eprintln!("  {}", window);
+                            }
+                            format!("Window with PID {} not found", pid)
+                        });
+                }
+            }
         }
         Mode { index: Some(index), .. } => {
-            println!("Window targeting by index: {} (not implemented)", index);
+            let windows = platform::list_windows()
+                .context("Failed to enumerate windows")?;
+
+            if index >= windows.len() {
+                return Err(AppError::invalid_index(index, windows.len() - 1))
+                    .with_context(|| {
+                        eprintln!("\nAvailable windows:");
+                        for window in &windows {
+                            eprintln!("  {}", window);
+                        }
+                        format!("Invalid window index {}", index)
+                    });
+            }
+
+            let window = &windows[index];
+            println!("Selected window: {}", window);
             println!("Output path: {}", output_path.display());
         }
         Mode { highlight: Some(index), .. } => {
-            println!("Highlight window at index: {} (not implemented)", index);
+            let windows = platform::list_windows()
+                .context("Failed to enumerate windows")?;
+
+            if index >= windows.len() {
+                return Err(AppError::invalid_index(index, windows.len() - 1))
+                    .with_context(|| {
+                        eprintln!("\nAvailable windows:");
+                        for window in &windows {
+                            eprintln!("  {}", window);
+                        }
+                        format!("Invalid window index {} for highlight", index)
+                    });
+            }
+
+            let window = &windows[index];
+            println!("Would highlight window: {}", window);
         }
         _ => {
             unreachable!("Clap should enforce exactly one mode");
