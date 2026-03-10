@@ -102,7 +102,11 @@
 4. Screenshot excludes any highlight border if highlight was previously shown
 5. On macOS without Screen Recording permission, user sees clear error message directing to System Preferences
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+**Plan list:**
+- [ ] 04-01-PLAN.md — capture_service module with error types and TDD unit tests (CAP-01, CAP-02, CAP-04, ERR-04)
+- [ ] 04-02-PLAN.md — Wire capture into main.rs targeting arms and CLI integration tests (CAP-01, CAP-02, CAP-03, CAP-04, CLI-04, CLI-07, ERR-04)
 
 ---
 
@@ -132,7 +136,7 @@
 | 1. Foundation | 2/3 | Complete    | 2026-03-10 |
 | 2. Window Discovery | 1/2 | In Progress|  |
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
-| 4. Screenshot Capture | 0/? | Not started | - |
+| 4. Screenshot Capture | 0/2 | Not started | - |
 | 5. Highlight Mode | 0/? | Not started | - |
 
 ---
@@ -176,4 +180,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-10 (Phase 3 planned)*
+*Last updated: 2026-03-10 (Phase 4 planned)*
