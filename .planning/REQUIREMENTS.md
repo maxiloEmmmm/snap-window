@@ -19,11 +19,11 @@
 ### Window Operations
 
 - [ ] **WIN-01**: Cross-platform window enumeration (Windows, macOS, Linux X11)
-- [ ] **WIN-02**: Target window by substring match on title (case-insensitive)
-- [ ] **WIN-03**: Target window by exact PID match
-- [ ] **WIN-04**: Target window by index from list
-- [ ] **WIN-05**: Graceful error when window not found — auto-list all windows
-- [ ] **WIN-06**: Graceful error on unsupported platform — list all windows if possible
+- [x] **WIN-02**: Target window by substring match on title (case-insensitive)
+- [x] **WIN-03**: Target window by exact PID match
+- [x] **WIN-04**: Target window by index from list
+- [x] **WIN-05**: Graceful error when window not found — auto-list all windows
+- [x] **WIN-06**: Graceful error on unsupported platform — list all windows if possible
 
 ### Screenshot Capture
 
@@ -93,11 +93,11 @@
 | CLI-07 | Phase 1 | Complete |
 | CLI-08 | Phase 1 | Complete |
 | WIN-01 | Phase 2 | Pending |
-| WIN-02 | Phase 3 | Pending |
-| WIN-03 | Phase 3 | Pending |
-| WIN-04 | Phase 3 | Pending |
-| WIN-05 | Phase 3 | Pending |
-| WIN-06 | Phase 2 | Pending |
+| WIN-02 | Phase 3 | Complete |
+| WIN-03 | Phase 3 | Complete |
+| WIN-04 | Phase 3 | Complete |
+| WIN-05 | Phase 3 | Complete |
+| WIN-06 | Phase 2 | Complete |
 | CAP-01 | Phase 4 | Pending |
 | CAP-02 | Phase 4 | Pending |
 | CAP-03 | Phase 4 | Pending |

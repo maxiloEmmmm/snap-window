@@ -11,7 +11,7 @@
 
 - [~] **Phase 1: Foundation** - Rust project scaffolding, CLI argument parsing, error handling framework (2/3 plans complete)
 - [ ] **Phase 2: Window Discovery** - Cross-platform window enumeration and listing with indices
-- [ ] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling
+- [x] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling (completed 2026-03-10)
 - [ ] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths
 - [ ] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export
 
@@ -80,7 +80,7 @@
 4. When target window not found, user sees clear error message and auto-list of available windows
 5. Name matching is case-insensitive and matches partial titles
 
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 **Plan list:**
 - [ ] 03-01-PLAN.md — Window service module with targeting functions and main.rs refactor (WIN-02, WIN-03, WIN-04, WIN-05, ERR-02)
@@ -131,7 +131,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/3 | Complete    | 2026-03-10 |
 | 2. Window Discovery | 1/2 | In Progress|  |
-| 3. Window Targeting | 0/1 | Planning | - |
+| 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
 | 4. Screenshot Capture | 0/? | Not started | - |
 | 5. Highlight Mode | 0/? | Not started | - |
 

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 3
-current_plan: Not started
-status: planning
-last_updated: "2026-03-10T13:56:45.821Z"
+current_plan: Plan 01 complete
+status: in-progress
+last_updated: "2026-03-10T14:14:22.850Z"
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  completed_phases: 3
+  total_plans: 6
+  completed_plans: 6
 ---
 
 # Project State: snap-window
@@ -18,8 +18,8 @@ progress:
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
 **Current Phase:** 3
-**Current Plan:** Not started
-**Status:** Ready to plan
+**Current Plan:** Plan 01 complete
+**Status:** In progress
 **Last Updated:** 2026-03-10
 
 ---
@@ -27,11 +27,11 @@ progress:
 ## Current Position
 
 ```
-[████████░░] 80% - Phase 2 in progress (4/5 plans complete)
+[██████████] 100% - Phase 3 Plan 01 complete (6/6 plans complete)
 
 Phase 1: Foundation         [██████████] 100% - 3/3 plans complete
-Phase 2: Window Discovery   [████░░░░░░] 40% - 2/? plans complete
-Phase 3: Window Targeting   [░░░░░░░░░░] 0% - Not started
+Phase 2: Window Discovery   [██████████] 100% - 2/2 plans complete
+Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
 Phase 4: Screenshot Capture [░░░░░░░░░░] 0% - Not started
 Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 ```
@@ -79,6 +79,7 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | Phase/Plan | Duration | Tasks | Files |
 |------------|----------|-------|-------|
 | Phase 02-window-discovery P02 | 3 min | 3 tasks | 4 files |
+| Phase 03-window-targeting P01 | 4 min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-10 | assert_cmd for CLI testing | Integration tests invoke actual binary for end-to-end verification |
 | 2026-03-10 | platform_error() as semantic alias | Separate semantic constructor for platform API failures vs generic enumeration failures |
 | 2026-03-10 | Determinism contract via test | Mock implementations validated as deterministic to establish contract for real platform code |
+| 2026-03-10 | window_service as pure function library | Service functions accept &[WindowInfo] slices — testable without binary, no state |
+| 2026-03-10 | find_by_index empty list guard | is_empty() check before computing max index prevents integer underflow panic |
 
 ### Open Questions
 
@@ -118,8 +121,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 02-02 - Platform error handling and test coverage (compile-time guard, platform_error(), 9 platform tests)
-**Next Action:** Continue Phase 02: Window Discovery - Plan 03 or next planned work
+**Last Action:** Completed plan 03-01 - window_service module with case-insensitive matching, main.rs delegation refactor, 10 unit tests + 4 updated integration tests
+**Next Action:** Continue Phase 03: Window Targeting or advance to Phase 04
 **Context Valid Until:** 2026-03-11 (assumed)
 
 ### Key Files
@@ -138,6 +141,7 @@ None currently.
 | 01-foundation | 2026-03-10 | - | Plan 01 complete: CLI foundation with mock window enumeration |
 | 01-foundation | 2026-03-10 | - | Plan 02 complete: Error handling with anyhow/thiserror and dynamic defaults |
 | 01-foundation | 2026-03-10 | - | Plan 03 complete: Cross-platform compilation with conditional compilation and integration tests |
+| 03-window-targeting | 2026-03-10 | 2026-03-10 | Plan 01 complete: window_service module with case-insensitive matching, underflow guard, auto-list delegation |
 
 ---
 
