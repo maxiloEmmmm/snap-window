@@ -4,7 +4,7 @@
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
 **Current Phase:** 01-foundation
 **Current Plan:** 01-03
-**Status:** Plan 01-02 complete - Error handling with anyhow/thiserror and dynamic defaults
+**Status:** Plan 01-03 complete - Cross-platform compilation with conditional compilation and integration tests
 **Last Updated:** 2026-03-10
 
 ---
@@ -12,9 +12,9 @@
 ## Current Position
 
 ```
-[░░░░░░░░░░] 5% - Phase 1 in progress
+[░░░░░░░░░░] 5% - Phase 1 complete
 
-Phase 1: Foundation         [████░░░░░░] 67% - 2/3 plans complete
+Phase 1: Foundation         [██████████] 100% - 3/3 plans complete
 Phase 2: Window Discovery   [░░░░░░░░░░] 0% - Not started
 Phase 3: Window Targeting   [░░░░░░░░░░] 0% - Not started
 Phase 4: Screenshot Capture [░░░░░░░░░░] 0% - Not started
@@ -34,6 +34,7 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 - Linux X11: x11rb v0.12+
 - Image: image v0.25.5
 - Errors: anyhow/thiserror
+- Testing: assert_cmd, predicates
 
 **Key Decisions:**
 - PNG only (no other image formats)
@@ -75,6 +76,8 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-10 | Hybrid error handling (anyhow + thiserror) | anyhow for propagation, thiserror for domain errors |
 | 2026-03-10 | Auto-list on lookup failures | Better UX - show available windows when target not found |
 | 2026-03-10 | Timestamped default output paths | Compact YYYYMMDD_HHMMSS format for sortable filenames |
+| 2026-03-10 | Platform stubs with cfg attributes | Conditional compilation for cross-platform support |
+| 2026-03-10 | assert_cmd for CLI testing | Integration tests invoke actual binary for end-to-end verification |
 
 ### Open Questions
 
@@ -94,8 +97,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 01-02 - Error handling with anyhow/thiserror and dynamic defaults
-**Next Action:** Execute plan 01-03
+**Last Action:** Completed plan 01-03 - Cross-platform compilation with conditional compilation and integration tests
+**Next Action:** Phase 01-foundation complete - Ready for Phase 02: Window Discovery
 **Context Valid Until:** 2026-03-11 (assumed)
 
 ### Key Files
@@ -113,6 +116,7 @@ None currently.
 |-------|---------|-----------|-------|
 | 01-foundation | 2026-03-10 | - | Plan 01 complete: CLI foundation with mock window enumeration |
 | 01-foundation | 2026-03-10 | - | Plan 02 complete: Error handling with anyhow/thiserror and dynamic defaults |
+| 01-foundation | 2026-03-10 | - | Plan 03 complete: Cross-platform compilation with conditional compilation and integration tests |
 
 ---
 
