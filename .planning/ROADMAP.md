@@ -16,7 +16,7 @@
 - [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
 - [x] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export (completed 2026-03-11)
 - [~] **Phase 6: Support Regexp Title** - Regular expression pattern matching for window targeting (1/2 plans complete)
-- [~] **Phase 7: Support Wayland** - Native Wayland support via XDG Desktop Portal with runtime X11/Wayland detection (1/3 plans complete)
+- [~] **Phase 7: Support Wayland** - Native Wayland support via XDG Desktop Portal with runtime X11/Wayland detection (2/3 plans complete)
 
 ---
 
@@ -181,7 +181,7 @@
 
 **Plan list:**
 - [x] 07-01-PLAN.md — Runtime detection and backend selection (LIN-02) - Refactor linux.rs into backend trait pattern with detector
-- [ ] 07-02-PLAN.md — Wayland window enumeration via foreign-toplevel (LIN-01) - Implement WaylandBackend with wlr-foreign-toplevel protocol
+- [x] 07-02-PLAN.md — Wayland window enumeration via foreign-toplevel (LIN-01) - Implement WaylandBackend with wlr-foreign-toplevel protocol
 - [ ] 07-03-PLAN.md — Wayland screenshot capture via XDG Desktop Portal (LIN-01) - Integrate ashpd for portal-based capture
 
 ---
@@ -196,7 +196,7 @@
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 | 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
-| 7. Support Wayland | 1/3 | In Progress | 2026-03-11 |
+| 7. Support Wayland | 2/3 | In Progress | 2026-03-11 |
 
 ---
 
@@ -249,4 +249,4 @@ Phase 7 (Support Wayland)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-11 (Phase 7 Plan 01 complete)*
+*Last updated: 2026-03-11 (Phase 7 Plan 02 complete)*

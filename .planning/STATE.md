@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 7
-current_plan: 1
+current_plan: 2
 status: in_progress
-last_updated: "2026-03-11T15:51:00Z"
+last_updated: "2026-03-11T15:44:19Z"
 progress:
   total_phases: 7
   completed_phases: 6
@@ -35,7 +35,7 @@ Phase 3: Window Targeting   [██████████] 100% - 1/1 plans co
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
 Phase 6: Support Regexp     [██████████] 100% - 2/2 plans complete
-Phase 7: Support Wayland    [███       ] 33% - 1/3 plans complete
+Phase 7: Support Wayland    [██████    ] 67% - 2/3 plans complete
 ```
 
 ---
@@ -49,6 +49,7 @@ Phase 7: Support Wayland    [███       ] 33% - 1/3 plans complete
 - Windows: windows-rs v0.62+
 - macOS: objc2-core-graphics v0.3.2
 - Linux X11: x11rb v0.12+
+- Linux Wayland: wayland-client v0.31, wayland-protocols-wlr v0.3
 - Image: image v0.25.5
 - Errors: anyhow/thiserror
 - Testing: assert_cmd, predicates
@@ -126,6 +127,8 @@ Phase 7: Support Wayland    [███       ] 33% - 1/3 plans complete
 | 2026-03-11 | Dual-outcome test pattern | Tests work in both headless CI and desktop environments |
 | 2026-03-11 | Backend trait pattern for Linux | Enables runtime X11/Wayland selection; X11Backend implements LinuxBackend trait |
 | 2026-03-11 | Prefer Wayland over X11 when both available | Handles XWayland case correctly; native Wayland preferred |
+| 2026-03-11 | Foreign-toplevel protocol for Wayland enumeration | Silent window discovery without portal dialogs; works on wlroots compositors |
+| 2026-03-11 | Geometry/PID unavailable in foreign-toplevel | Set to 0 - will be populated during capture phase if needed |
 
 ### Open Questions
 
@@ -150,8 +153,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 07-01 - refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade
-**Next Action:** Plan 07-02 - implement native Wayland backend
+**Last Action:** Completed plan 07-02 - implemented WaylandBackend with foreign-toplevel protocol, runtime backend selection preferring Wayland
+**Next Action:** Plan 07-03 - Wayland screenshot capture (if xcap doesn't handle it internally)
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -179,6 +182,7 @@ None currently.
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 01 complete: core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests |
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests |
 | 07-support-wayland | 2026-03-11 | - | Plan 01 complete: refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade |
+| 07-support-wayland | 2026-03-11 | - | Plan 02 complete: WaylandBackend with foreign-toplevel protocol, window enumeration on wlroots compositors |
 
 ---
 
