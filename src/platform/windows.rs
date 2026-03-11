@@ -132,8 +132,123 @@ fn get_process_name(pid: u32) -> Option<String> {
     }
 }
 
+/// Show a red highlight border around a window using 4 overlay windows.
+///
+/// Creates 4 topmost, tool windows with red backgrounds forming a border frame
+/// around the target window. Windows are destroyed after 3 seconds.
+#[cfg(target_os = "windows")]
+pub fn show_highlight_border(info: &WindowInfo) -> Result<()> {
+    use crate::error::AppError;
+    use std::thread;
+    use std::time::Duration;
+    use windows::Win32::{
+        Foundation::{COLORREF, HWND, LPARAM, LRESULT, WPARAM},
+        Graphics::Gdi::{CreateSolidBrush, RGB},
+        UI::WindowsAndMessaging::{
+            CreateWindowExW, DestroyWindow, RegisterClassW, ShowWindow, CS_HREDRAW, CS_VREDRAW,
+            CW_USEDEFAULT, HCURSOR, HICON, HMENU, SW_SHOWNA, WINDOW_EX_STYLE, WM_DESTROY,
+            WNDCLASSW, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP,
+        },
+    };
+
+    const THICKNESS: i32 = 4;
+    const CLASS_NAME: &[u16] = w!("SnapWindowHighlight");
+
+    unsafe {
+        // Register window class with red background
+        let hbrush = CreateSolidBrush(COLORREF(RGB(255, 0, 0).0));
+        let wc = WNDCLASSW {
+            lpfnWndProc: Some(highlight_wnd_proc),
+            hInstance: windows::Win32::System::LibraryLoader::GetModuleHandleW(None)
+                .map_err(|e| AppError::platform_error(format!("GetModuleHandleW failed: {}", e)))?
+                .into(),
+            hCursor: HCURSOR::default(),
+            hIcon: HICON::default(),
+            lpszClassName: windows::core::PCWSTR(CLASS_NAME.as_ptr()),
+            hbrBackground: hbrush,
+            style: CS_HREDRAW | CS_VREDRAW,
+            ..Default::default()
+        };
+
+        RegisterClassW(&wc);
+
+        // Calculate border positions
+        let x = info.x;
+        let y = info.y;
+        let width = info.width as i32;
+        let height = info.height as i32;
+
+        // Create 4 overlay windows
+        let ex_style = WS_EX_TOPMOST | WS_EX_TOOLWINDOW;
+        let style = WS_POPUP;
+
+        let hwnds: Vec<HWND> = [
+            // Top
+            (x, y, width, THICKNESS),
+            // Bottom
+            (x, y + height - THICKNESS, width, THICKNESS),
+            // Left
+            (x, y + THICKNESS, THICKNESS, height - 2 * THICKNESS),
+            // Right
+            (x + width - THICKNESS, y + THICKNESS, THICKNESS, height - 2 * THICKNESS),
+        ]
+        .iter()
+        .map(|(x, y, w, h)| {
+            CreateWindowExW(
+                ex_style,
+                windows::core::PCWSTR(CLASS_NAME.as_ptr()),
+                w!(""),
+                style,
+                *x,
+                *y,
+                *w,
+                *h,
+                None,
+                HMENU::default(),
+                wc.hInstance,
+                None,
+            )
+        })
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| AppError::platform_error(format!("CreateWindowExW failed: {}", e)))?;
+
+        // Show all windows
+        for hwnd in &hwnds {
+            let _ = ShowWindow(*hwnd, SW_SHOWNA);
+        }
+
+        // Display for 3 seconds
+        thread::sleep(Duration::from_secs(3));
+
+        // Destroy all windows
+        for hwnd in hwnds {
+            let _ = DestroyWindow(hwnd);
+        }
+    }
+
+    Ok(())
+}
+
+/// Window procedure for highlight overlay windows (minimal)
+#[cfg(target_os = "windows")]
+extern "system" fn highlight_wnd_proc(
+    hwnd: HWND,
+    msg: u32,
+    wparam: WPARAM,
+    lparam: LPARAM,
+) -> LRESULT {
+    use windows::Win32::UI::WindowsAndMessaging::DefWindowProcW;
+    unsafe { DefWindowProcW(hwnd, msg, wparam, lparam) }
+}
+
 /// Stub for non-Windows platforms (prevents compilation errors during development)
 #[cfg(not(target_os = "windows"))]
 pub fn list_windows() -> Result<Vec<WindowInfo>> {
     anyhow::bail!("Windows platform module is not available on this platform")
+}
+
+/// Stub for non-Windows platforms (prevents compilation errors during development)
+#[cfg(not(target_os = "windows"))]
+pub fn show_highlight_border(_info: &WindowInfo) -> Result<()> {
+    anyhow::bail!("Windows highlight border is not available on this platform")
 }

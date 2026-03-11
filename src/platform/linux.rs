@@ -215,8 +215,171 @@ fn get_window_geometry(
     ))
 }
 
+/// Show a red highlight border around a window using 4 X11 overlay windows.
+///
+/// Creates 4 borderless X11 windows with red backgrounds, positioned above
+/// the target window using _NET_WM_STATE_ABOVE. Windows auto-dismiss after 3 seconds.
+#[cfg(target_os = "linux")]
+pub fn show_highlight_border(info: &WindowInfo) -> Result<()> {
+    use crate::error::AppError;
+    use std::thread;
+    use std::time::Duration;
+    use x11rb::{
+        connection::Connection,
+        protocol::xproto::{
+            AtomEnum, ChangeWindowAttributesAux, ConfigWindow, ConfigureWindowAux, ConnectionExt,
+            CreateWindowAux, EventMask, PropMode, SetWindowAttributes, WindowClass, CW,
+        },
+        rust_connection::RustConnection,
+    };
+
+    const THICKNESS: u32 = 4;
+
+    let (conn, screen_num) = RustConnection::connect(None)
+        .map_err(|e| AppError::platform_error(format!("Failed to connect to X server: {}", e)))?;
+
+    let screen = &conn.setup().roots[screen_num];
+    let root = screen.root;
+    let depth = screen.root_depth;
+    let visual = screen.root_visual;
+
+    // Intern atoms for window properties
+    let net_wm_state = conn
+        .intern_atom(false, b"_NET_WM_STATE")
+        .map_err(|e| AppError::platform_error(format!("Failed to intern _NET_WM_STATE: {}", e)))?
+        .reply()
+        .map_err(|e| AppError::platform_error(format!("_NET_WM_STATE reply error: {}", e)))?
+        .atom;
+
+    let net_wm_state_above = conn
+        .intern_atom(false, b"_NET_WM_STATE_ABOVE")
+        .map_err(|e| AppError::platform_error(format!("Failed to intern _NET_WM_STATE_ABOVE: {}", e)))?
+        .reply()
+        .map_err(|e| AppError::platform_error(format!("_NET_WM_STATE_ABOVE reply error: {}", e)))?
+        .atom;
+
+    let net_wm_window_type = conn
+        .intern_atom(false, b"_NET_WM_WINDOW_TYPE")
+        .map_err(|e| AppError::platform_error(format!("Failed to intern _NET_WM_WINDOW_TYPE: {}", e)))?
+        .reply()
+        .map_err(|e| AppError::platform_error(format!("_NET_WM_WINDOW_TYPE reply error: {}", e)))?
+        .atom;
+
+    let net_wm_window_type_notification = conn
+        .intern_atom(false, b"_NET_WM_WINDOW_TYPE_NOTIFICATION")
+        .map_err(|e| AppError::platform_error(format!("Failed to intern _NET_WM_WINDOW_TYPE_NOTIFICATION: {}", e)))?
+        .reply()
+        .map_err(|e| AppError::platform_error(format!("_NET_WM_WINDOW_TYPE_NOTIFICATION reply error: {}", e)))?
+        .atom;
+
+    // Allocate red color (TrueColor visual - use RGB directly)
+    // For TrueColor, we can use the pixel value directly: 0xFF0000 for red
+    let red_pixel: u32 = 0xFF0000;
+
+    let x = info.x as i16;
+    let y = info.y as i16;
+    let width = info.width as u16;
+    let height = info.height as u16;
+
+    // Calculate border positions
+    let positions = [
+        // Top
+        (x, y, width as u16, THICKNESS as u16),
+        // Bottom
+        (x, y + height as i16 - THICKNESS as i16, width as u16, THICKNESS as u16),
+        // Left
+        (x, y + THICKNESS as i16, THICKNESS as u16, (height - 2 * THICKNESS as u16) as u16),
+        // Right
+        (x + width as i16 - THICKNESS as i16, y + THICKNESS as i16, THICKNESS as u16, (height - 2 * THICKNESS as u16) as u16),
+    ];
+
+    let mut windows: Vec<u32> = Vec::with_capacity(4);
+
+    for (win_x, win_y, win_w, win_h) in positions {
+        let win_id = conn
+            .generate_id()
+            .map_err(|e| AppError::platform_error(format!("Failed to generate window ID: {}", e)))?;
+
+        // Create window with override_redirect = true (no window manager decoration)
+        let create_aux = CreateWindowAux::new()
+            .background_pixel(red_pixel)
+            .override_redirect(1)
+            .event_mask(EventMask::empty());
+
+        conn.create_window(
+            depth,
+            win_id,
+            root,
+            win_x,
+            win_y,
+            win_w,
+            win_h,
+            0, // border width
+            WindowClass::INPUT_OUTPUT,
+            visual,
+            &create_aux,
+        )
+        .map_err(|e| AppError::platform_error(format!("Failed to create window: {}", e)))?;
+
+        // Set _NET_WM_STATE_ABOVE to keep window on top
+        let above_atom_bytes: [u8; 4] = net_wm_state_above.to_le_bytes();
+        conn.change_property(
+            PropMode::REPLACE,
+            win_id,
+            net_wm_state,
+            AtomEnum::ATOM,
+            32,
+            1,
+            &above_atom_bytes,
+        )
+        .map_err(|e| AppError::platform_error(format!("Failed to set _NET_WM_STATE_ABOVE: {}", e)))?;
+
+        // Set _NET_WM_WINDOW_TYPE to _NET_WM_WINDOW_TYPE_NOTIFICATION
+        let window_type_bytes: [u8; 4] = net_wm_window_type_notification.to_le_bytes();
+        conn.change_property(
+            PropMode::REPLACE,
+            win_id,
+            net_wm_window_type,
+            AtomEnum::ATOM,
+            32,
+            1,
+            &window_type_bytes,
+        )
+        .map_err(|e| AppError::platform_error(format!("Failed to set _NET_WM_WINDOW_TYPE: {}", e)))?;
+
+        // Map (show) the window
+        conn.map_window(win_id)
+            .map_err(|e| AppError::platform_error(format!("Failed to map window: {}", e)))?;
+
+        windows.push(win_id);
+    }
+
+    // Flush all pending requests
+    conn.flush()
+        .map_err(|e| AppError::platform_error(format!("Failed to flush X connection: {}", e)))?;
+
+    // Display for 3 seconds
+    thread::sleep(Duration::from_secs(3));
+
+    // Destroy all windows
+    for win_id in windows {
+        let _ = conn.destroy_window(win_id);
+    }
+
+    conn.flush()
+        .map_err(|e| AppError::platform_error(format!("Failed to flush after destroy: {}", e)))?;
+
+    Ok(())
+}
+
 /// Stub for non-Linux platforms (prevents compilation errors during development)
 #[cfg(not(target_os = "linux"))]
 pub fn list_windows() -> Result<Vec<WindowInfo>> {
     anyhow::bail!("Linux platform module is not available on this platform")
+}
+
+/// Stub for non-Linux platforms (prevents compilation errors during development)
+#[cfg(not(target_os = "linux"))]
+pub fn show_highlight_border(_info: &WindowInfo) -> Result<()> {
+    anyhow::bail!("Linux highlight border is not available on this platform")
 }

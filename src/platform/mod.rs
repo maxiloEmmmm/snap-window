@@ -29,18 +29,24 @@
 mod windows;
 #[cfg(target_os = "windows")]
 pub use windows::list_windows;
+#[cfg(target_os = "windows")]
+pub use windows::show_highlight_border;
 
 // macOS platform support
 #[cfg(target_os = "macos")]
 mod macos;
 #[cfg(target_os = "macos")]
 pub use macos::list_windows;
+#[cfg(target_os = "macos")]
+pub use macos::show_highlight_border;
 
 // Linux platform support
 #[cfg(target_os = "linux")]
 mod linux;
 #[cfg(target_os = "linux")]
 pub use linux::list_windows;
+#[cfg(target_os = "linux")]
+pub use linux::show_highlight_border;
 
 // Unsupported platform fallback
 // This provides a compile-time error for unsupported platforms

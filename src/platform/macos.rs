@@ -179,8 +179,136 @@ fn get_bounds_from_dict(dict: &objc2_core_foundation::CFDictionary) -> (i32, i32
     (x, y, width, height)
 }
 
+/// Show a red highlight border around a window using 4 NSWindow overlays.
+///
+/// Creates 4 borderless, floating NSWindow instances forming a red frame around
+/// the target window. Windows auto-dismiss after 3 seconds when the function
+/// returns and the overlay windows are dropped.
+///
+/// # Coordinate Conversion
+///
+/// macOS uses two coordinate systems:
+/// - Quartz (Core Graphics): origin at top-left of screen
+/// - Cocoa (AppKit): origin at bottom-left of screen
+///
+/// This function converts Quartz coordinates from WindowInfo to Cocoa coordinates
+/// for NSWindow positioning.
+#[cfg(target_os = "macos")]
+pub fn show_highlight_border(info: &WindowInfo) -> Result<()> {
+    use objc2::{MainThreadOnly, rc::Retained};
+    use objc2_app_kit::{
+        NSApplication, NSApplicationActivationPolicy, NSColor, NSWindow, NSWindowStyleMask,
+    };
+    use objc2_core_foundation::CGFloat;
+    use objc2_foundation::{NSPoint, NSRect, NSSize, MainThreadMarker};
+    use std::thread;
+    use std::time::Duration;
+
+    const THICKNESS: CGFloat = 4.0;
+    const DISPLAY_SECS: u64 = 3;
+
+    // Initialize NSApplication (required for NSWindow creation)
+    // SAFETY: NSApplication sharedApplication is safe to call once per process
+    let mtm = MainThreadMarker::new().expect("Must be on main thread");
+    let app = NSApplication::sharedApplication(mtm);
+    unsafe {
+        app.setActivationPolicy(NSApplicationActivationPolicy::Accessory);
+    }
+
+    // Get screen height for coordinate conversion (Quartz -> Cocoa)
+    // SAFETY: mainScreen returns optional, unwrap with fallback
+    let screen_height: CGFloat = {
+        use objc2_app_kit::NSScreen;
+        let screen = NSScreen::mainScreen(mtm);
+        screen.map(|s| s.frame().size.height).unwrap_or(1080.0)
+    };
+
+    // Convert Quartz coordinates (top-left origin) to Cocoa (bottom-left origin)
+    let quartz_y = info.y as CGFloat;
+    let window_height = info.height as CGFloat;
+    let cocoa_y = screen_height - (quartz_y + window_height);
+
+    let x = info.x as CGFloat;
+    let y = cocoa_y;
+    let width = info.width as CGFloat;
+    let height = window_height;
+
+    // Calculate the 4 border rectangles
+    // Top:    (x, y + height - thickness, width, thickness)
+    // Bottom: (x, y, width, thickness)
+    // Left:   (x, y + thickness, thickness, height - 2*thickness)
+    // Right:  (x + width - thickness, y + thickness, thickness, height - 2*thickness)
+
+    let top_rect = NSRect::new(
+        NSPoint::new(x, y + height - THICKNESS),
+        NSSize::new(width, THICKNESS),
+    );
+    let bottom_rect = NSRect::new(
+        NSPoint::new(x, y),
+        NSSize::new(width, THICKNESS),
+    );
+    let left_rect = NSRect::new(
+        NSPoint::new(x, y + THICKNESS),
+        NSSize::new(THICKNESS, height - 2.0 * THICKNESS),
+    );
+    let right_rect = NSRect::new(
+        NSPoint::new(x + width - THICKNESS, y + THICKNESS),
+        NSSize::new(THICKNESS, height - 2.0 * THICKNESS),
+    );
+
+    let rects = [top_rect, bottom_rect, left_rect, right_rect];
+
+    // Create 4 overlay windows
+    let mut windows: Vec<Retained<NSWindow>> = Vec::with_capacity(4);
+
+    for rect in rects {
+        // SAFETY: Creating NSWindow with valid frame and style mask
+        let window = unsafe {
+            let win = NSWindow::initWithContentRect_styleMask_backing_defer(
+                NSWindow::alloc(mtm),
+                rect,
+                NSWindowStyleMask::Borderless,
+                objc2_app_kit::NSBackingStoreType::Buffered,
+                false,
+            );
+
+            // Configure window properties
+            win.setOpaque(true);
+            win.setBackgroundColor(Some(&NSColor::redColor()));
+            win.setIgnoresMouseEvents(true);
+            win.setReleasedWhenClosed(false);
+
+            // Set floating window level (kCGFloatingWindowLevel = 3)
+            win.setLevel(3);
+
+            win
+        };
+
+        windows.push(window);
+    }
+
+    // Show all windows
+    for window in &windows {
+        unsafe {
+            window.orderFrontRegardless();
+        }
+    }
+
+    // Keep windows visible for 3 seconds
+    thread::sleep(Duration::from_secs(DISPLAY_SECS));
+
+    // Windows are closed/dropped when they go out of scope
+    Ok(())
+}
+
 /// Stub for non-macOS platforms (prevents compilation errors during development)
 #[cfg(not(target_os = "macos"))]
 pub fn list_windows() -> Result<Vec<WindowInfo>> {
     anyhow::bail!("macOS platform module is not available on this platform")
+}
+
+/// Stub for non-macOS platforms (prevents compilation errors during development)
+#[cfg(not(target_os = "macos"))]
+pub fn show_highlight_border(_info: &WindowInfo) -> Result<()> {
+    anyhow::bail!("macOS highlight border is not available on this platform")
 }
