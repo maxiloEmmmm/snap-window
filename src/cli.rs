@@ -28,6 +28,10 @@ pub struct Mode {
     #[arg(short, long, value_name = "NAME")]
     pub window: Option<String>,
 
+    /// Target window by regular expression pattern on title or app name
+    #[arg(short = 'r', long, value_name = "PATTERN")]
+    pub regexp: Option<String>,
+
     /// Target window by process ID
     #[arg(short, long, value_name = "PID")]
     pub pid: Option<u32>,
