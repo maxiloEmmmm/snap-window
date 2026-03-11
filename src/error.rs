@@ -14,10 +14,6 @@ pub enum AppError {
     #[error("No window at index {index}. Use --list to see valid indices (0-{max})")]
     InvalidIndex { index: usize, max: usize },
 
-    /// Platform is not supported
-    #[error("Platform '{0}' is not supported")]
-    UnsupportedPlatform(String),
-
     /// Failed to enumerate windows
     #[error("Failed to enumerate windows: {0}")]
     EnumerationFailed(String),
@@ -52,11 +48,6 @@ impl AppError {
     /// Create an InvalidIndex error with the given index and max bounds
     pub fn invalid_index(index: usize, max: usize) -> Self {
         Self::InvalidIndex { index, max }
-    }
-
-    /// Create an UnsupportedPlatform error with the current platform name
-    pub fn unsupported_platform() -> Self {
-        Self::UnsupportedPlatform(std::env::consts::OS.to_string())
     }
 
     /// Create an EnumerationFailed error with the given message
@@ -114,12 +105,6 @@ mod tests {
     }
 
     #[test]
-    fn test_unsupported_platform_display() {
-        let err = AppError::UnsupportedPlatform("freebsd".to_string());
-        assert_eq!(err.to_string(), "Platform 'freebsd' is not supported");
-    }
-
-    #[test]
     fn test_enumeration_failed_display() {
         let err = AppError::enumeration_failed("permission denied");
         assert_eq!(
@@ -133,14 +118,6 @@ mod tests {
         // Verify that AppError implements std::error::Error
         fn assert_error_trait<T: std::error::Error>() {}
         assert_error_trait::<AppError>();
-    }
-
-    #[test]
-    fn test_unsupported_platform_auto_detect() {
-        let err = AppError::unsupported_platform();
-        // Should contain the current OS name
-        let msg = err.to_string();
-        assert!(msg.contains(std::env::consts::OS));
     }
 
     #[test]
