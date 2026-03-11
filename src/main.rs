@@ -31,8 +31,6 @@ fn run() -> Result<()> {
             for window in windows {
                 println!("{}", window);
             }
-            // Show resolved output path for informational purposes
-            eprintln!("\nDefault output path (when not specified): {}", output_path.display());
         }
         Mode { window: Some(name), .. } => {
             let windows = platform::list_windows()
