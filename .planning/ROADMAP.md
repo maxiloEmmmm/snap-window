@@ -177,7 +177,7 @@
 5. Clear error messages when portal is unavailable or permission denied
 6. Graceful fallback from Wayland to X11 when possible
 
-**Plans:** 3 plans planned
+**Plans:** 3/3 plans complete
 
 **Plan list:**
 - [x] 07-01-PLAN.md — Runtime detection and backend selection (LIN-02) - Refactor linux.rs into backend trait pattern with detector
@@ -196,7 +196,7 @@
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 | 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
-| 7. Support Wayland | 2/3 | In Progress | 2026-03-11 |
+| 7. Support Wayland | 3/3 | Complete   | 2026-03-11 |
 
 ---
 

@@ -58,8 +58,8 @@
 
 ### Platform Support
 
-- **LIN-01`: Native Wayland support (via XDG Desktop Portal)
-- **LIN-02`: Runtime detection between X11 and Wayland
+- [x] **LIN-01**: Native Wayland support (via XDG Desktop Portal)
+- [x] **LIN-02**: Runtime detection between X11 and Wayland
 
 ### Additional Features
 

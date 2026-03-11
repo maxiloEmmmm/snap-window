@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 7
-current_plan: 2
+current_plan: 3
 status: in_progress
-last_updated: "2026-03-11T15:44:19Z"
+last_updated: "2026-03-11T15:46:23Z"
 progress:
   total_phases: 7
   completed_phases: 6
@@ -35,7 +35,7 @@ Phase 3: Window Targeting   [██████████] 100% - 1/1 plans co
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
 Phase 6: Support Regexp     [██████████] 100% - 2/2 plans complete
-Phase 7: Support Wayland    [██████    ] 67% - 2/3 plans complete
+Phase 7: Support Wayland    [██████████] 100% - 3/3 plans complete
 ```
 
 ---
@@ -129,6 +129,9 @@ Phase 7: Support Wayland    [██████    ] 67% - 2/3 plans complete
 | 2026-03-11 | Prefer Wayland over X11 when both available | Handles XWayland case correctly; native Wayland preferred |
 | 2026-03-11 | Foreign-toplevel protocol for Wayland enumeration | Silent window discovery without portal dialogs; works on wlroots compositors |
 | 2026-03-11 | Geometry/PID unavailable in foreign-toplevel | Set to 0 - will be populated during capture phase if needed |
+| 2026-03-11 | Wayland capture via XDG Desktop Portal | ashpd crate provides standard portal access; tokio runtime for async operations |
+| 2026-03-11 | Portal Screenshot API for Wayland capture | Simpler than ScreenCast API; captures full screen (specific window requires PipeWire) |
+| 2026-03-11 | LinuxBackend trait extended with capture_window | Unified interface for X11 and Wayland capture implementations |
 
 ### Open Questions
 
@@ -153,8 +156,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 07-02 - implemented WaylandBackend with foreign-toplevel protocol, runtime backend selection preferring Wayland
-**Next Action:** Plan 07-03 - Wayland screenshot capture (if xcap doesn't handle it internally)
+**Last Action:** Completed plan 07-03 - implemented Wayland screenshot capture using XDG Desktop Portal, extended LinuxBackend trait with capture_window
+**Next Action:** Phase 7 complete - all Wayland support implemented
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -183,6 +186,7 @@ None currently.
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests |
 | 07-support-wayland | 2026-03-11 | - | Plan 01 complete: refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade |
 | 07-support-wayland | 2026-03-11 | - | Plan 02 complete: WaylandBackend with foreign-toplevel protocol, window enumeration on wlroots compositors |
+| 07-support-wayland | 2026-03-11 | - | Plan 03 complete: Wayland screenshot capture via XDG Desktop Portal, LinuxBackend trait extended with capture_window |
 
 ---
 
