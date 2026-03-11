@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 5
-current_plan: 2
-status: executing
-last_updated: "2026-03-11T13:49:00Z"
+current_plan: 3
+status: completed
+last_updated: "2026-03-11T21:43:00Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State: snap-window
@@ -18,8 +18,8 @@ progress:
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
 **Current Phase:** 5
-**Current Plan:** 1
-**Status:** Executing
+**Current Plan:** 3
+**Status:** Completed
 **Last Updated:** 2026-03-11
 
 ---
@@ -33,7 +33,7 @@ Phase 1: Foundation         [██████████] 100% - 3/3 plans co
 Phase 2: Window Discovery   [██████████] 100% - 2/2 plans complete
 Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
-Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
+Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
 ```
 
 ---
@@ -75,6 +75,7 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | Platforms passing tests | 3/3 | - |
 | Phase 05-highlight-mode P01 | 5 min | 1 tasks | 4 files |
 | Phase 05-highlight-mode P02 | 25 min | 2 tasks | 7 files |
+| Phase 05-highlight-mode P03 | 5 min | 2 tasks | 2 files |
 
 ### Execution Metrics
 
@@ -132,8 +133,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 05-02 - highlight overlay for all platforms, highlight_service orchestration, 57 total tests green
-**Next Action:** Execute Phase 05 Plan 03 - Wire highlight into CLI
+**Last Action:** Completed plan 05-03 - highlight mode wired into main.rs with JSON export, 30 tests green
+**Next Action:** Phase 5 complete - all v1.0 requirements satisfied
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -157,6 +158,7 @@ None currently.
 | 04-screenshot-capture | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired capture_service into main.rs, 3 new CLI tests, 55 total tests |
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 01 complete: json_export module with serde serialization |
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 02 complete: highlight overlay for all platforms with 4-window border system |
+| 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 03 complete: highlight mode wired into main.rs with JSON export, 30 tests green |
 
 ---
 

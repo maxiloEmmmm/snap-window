@@ -29,6 +29,10 @@ pub enum AppError {
     /// Screen Recording permission not granted (macOS)
     #[error("Screen Recording permission required.\nGo to: System Preferences > Privacy & Security > Screen Recording\nEnable access for this terminal application, then retry.\n(Original error: {0})")]
     PermissionDenied(String),
+
+    /// Invalid regex pattern provided by user
+    #[error("Invalid regex pattern '{pattern}': {details}")]
+    InvalidRegexPattern { pattern: String, details: String },
 }
 
 impl AppError {
@@ -71,6 +75,14 @@ impl AppError {
     /// Create a PermissionDenied error with the given message
     pub fn permission_denied(msg: impl Into<String>) -> Self {
         Self::PermissionDenied(msg.into())
+    }
+
+    /// Create an InvalidRegexPattern error with the pattern and error details
+    pub fn invalid_regex_pattern(pattern: impl Into<String>, details: impl Into<String>) -> Self {
+        Self::InvalidRegexPattern {
+            pattern: pattern.into(),
+            details: details.into(),
+        }
     }
 }
 
@@ -146,5 +158,37 @@ mod tests {
             err.to_string(),
             "Failed to enumerate windows: permission denied"
         );
+    }
+
+    // REGEXP-01: InvalidRegexPattern error displays user-friendly message with pattern
+    #[test]
+    fn test_invalid_regex_pattern_display() {
+        let err = AppError::invalid_regex_pattern("[invalid", "unclosed character class");
+        assert_eq!(
+            err.to_string(),
+            "Invalid regex pattern '[invalid': unclosed character class"
+        );
+    }
+
+    // REGEXP-01: Error constructor accepts pattern and error details
+    #[test]
+    fn test_invalid_regex_pattern_constructor() {
+        let err = AppError::invalid_regex_pattern("test.*", "some error");
+        match err {
+            AppError::InvalidRegexPattern { pattern, details } => {
+                assert_eq!(pattern, "test.*");
+                assert_eq!(details, "some error");
+            }
+            _ => panic!("Expected InvalidRegexPattern variant"),
+        }
+    }
+
+    // REGEXP-01: Error implements std::error::Error trait
+    #[test]
+    fn test_invalid_regex_pattern_error_trait() {
+        let err = AppError::invalid_regex_pattern("pattern", "details");
+        // Verify it can be used as a dyn Error
+        fn assert_error_trait(_: &dyn std::error::Error) {}
+        assert_error_trait(&err);
     }
 }

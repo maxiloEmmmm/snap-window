@@ -13,7 +13,7 @@
 - [ ] **Phase 2: Window Discovery** - Cross-platform window enumeration and listing with indices
 - [x] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling (completed 2026-03-10)
 - [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
-- [ ] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export
+- [x] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export (completed 2026-03-11)
 
 ---
 
@@ -125,12 +125,12 @@
 4. JSON output path follows same logic as `--output` (same base name, .json extension)
 5. JSON contains platform-specific attributes: common fields (window_id, title, pid, app_name, x, y, width, height) plus platform-specific fields (Windows: hwnd, window_class, thread_id; macOS: window_number, owner_name, sharing_state; Linux X11: xid, wm_class, wm_window_role)
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
-Plans:
-- [ ] 05-01-PLAN.md — JSON export module with serde serialization and platform-specific fields (JSON-01, JSON-02, JSON-03, JSON-04, JSON-05, HIL-04)
-- [ ] 05-02-PLAN.md — Platform highlight overlay (red border) and highlight_service orchestration (HIL-01, HIL-02)
-- [ ] 05-03-PLAN.md — Wire highlight mode into main.rs with integration tests and human verification (HIL-01, HIL-02, HIL-03, HIL-04)
+**Plan list:**
+- [x] 05-01-PLAN.md — JSON export module with serde serialization and platform-specific fields (JSON-01, JSON-02, JSON-03, JSON-04, JSON-05, HIL-04)
+- [x] 05-02-PLAN.md — Platform highlight overlay (red border) and highlight_service orchestration (HIL-01, HIL-02)
+- [x] 05-03-PLAN.md — Wire highlight mode into main.rs with integration tests and human verification (HIL-01, HIL-02, HIL-03, HIL-04)
 
 ---
 
@@ -142,7 +142,7 @@ Plans:
 | 2. Window Discovery | 1/2 | In Progress|  |
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
-| 5. Highlight Mode | 2/3 | In Progress|  |
+| 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 
 ---
 
