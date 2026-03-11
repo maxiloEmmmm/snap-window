@@ -1,8 +1,8 @@
 # Roadmap: snap-window
 
 **Granularity:** Fine
-**Total Phases:** 5
-**Total Requirements:** 30 v1 requirements
+**Total Phases:** 6
+**Total Requirements:** 36 v1 requirements
 **Created:** 2026-03-10
 
 ---
@@ -14,6 +14,7 @@
 - [x] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling (completed 2026-03-10)
 - [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
 - [x] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export (completed 2026-03-11)
+- [~] **Phase 6: Support Regexp Title** - Regular expression pattern matching for window targeting (1/2 plans complete)
 
 ---
 
@@ -134,6 +135,30 @@
 
 ---
 
+### Phase 6: Support Regexp Title
+
+**Goal:** Users can target windows using regular expression patterns for more flexible matching.
+
+**Depends on:** Phase 5
+
+**Requirements:** REGEXP-01, REGEXP-02, REGEXP-03, REGEXP-04, REGEXP-05, REGEXP-06
+
+**Success Criteria** (what must be TRUE):
+1. User can run `--regexp "pattern"` to target windows by regex matching on title or app name
+2. Invalid regex patterns produce clear error messages with pattern details
+3. Multiple matches show disambiguation list with indices, suggesting `--index` usage
+4. Regex matching follows standard regex syntax (using `regex` crate)
+5. Case-insensitive matching available via `(?i)` inline flag
+6. Pattern matches both window title and application name
+
+**Plans:** 1/2 plans complete
+
+**Plan list:**
+- [x] 06-01-PLAN.md — Add regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag (REGEXP-01, REGEXP-02, REGEXP-03, REGEXP-04)
+- [ ] 06-02-PLAN.md — Wire --regexp in main.rs, add integration tests, human verification (REGEXP-05, REGEXP-06)
+
+---
+
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
@@ -143,6 +168,7 @@
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
+| 6. Support Regexp Title | 1/2 | In Progress | 2026-03-11 |
 
 ---
 
@@ -162,6 +188,9 @@ Phase 4 (Screenshot Capture)
     |
     v
 Phase 5 (Highlight Mode)
+    |
+    v
+Phase 6 (Support Regexp Title)
 ```
 
 ---
@@ -176,13 +205,15 @@ Phase 5 (Highlight Mode)
 | Highlight Mode | HIL-01 to HIL-04 | Phase 5 |
 | Window Info JSON | JSON-01 to JSON-05 | Phase 5 |
 | Error Handling | ERR-01 to ERR-04 | Phase 1, 3, 4 |
+| Regexp Matching | REGEXP-01 to REGEXP-06 | Phase 6 |
 
-**Total v1 Requirements:** 30
-**Mapped to Phases:** 30
+**Total v1 requirements:** 30
+**Total v1.5 requirements (including Phase 6):** 36
+**Mapped to phases:** 36
 **Unmapped:** 0
 
 ---
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-11 (Phase 5 planned)*
+*Last updated: 2026-03-11 (Phase 6 planned)*

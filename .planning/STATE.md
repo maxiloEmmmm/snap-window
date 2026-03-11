@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 5
-current_plan: 3
-status: completed
-last_updated: "2026-03-11T21:43:00Z"
+current_phase: 6
+current_plan: 1
+status: in_progress
+last_updated: "2026-03-11T14:31:00Z"
 progress:
-  total_phases: 5
+  total_phases: 6
   completed_phases: 5
-  total_plans: 11
-  completed_plans: 10
+  total_plans: 12
+  completed_plans: 11
 ---
 
 # Project State: snap-window
@@ -34,6 +34,7 @@ Phase 2: Window Discovery   [██████████] 100% - 2/2 plans co
 Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
+Phase 6: Support Regexp     [░░░░░░░░░░] 0% - 0/1 plans complete
 ```
 
 ---
@@ -114,6 +115,9 @@ Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans co
 | 2026-03-11 | Dual-outcome integration tests | Tests accept both success and graceful failure for headless CI |
 | 2026-03-11 | Added objc2 v0.6 dependency | Required for MainThreadOnly trait access in highlight overlay |
 | 2026-03-11 | Quartz to Cocoa coordinate conversion | Critical for correct NSWindow positioning on macOS |
+| 2026-03-11 | Regex crate 1.12 for pattern matching | Industry standard, excellent performance |
+| 2026-03-11 | Return Vec from find_by_regexp | Multiple matches possible; caller handles disambiguation |
+| 2026-03-11 | User-controlled case sensitivity | (?i) flag gives users full control vs forced case-insensitive |
 
 ### Open Questions
 
@@ -129,12 +133,16 @@ None currently.
 
 None currently.
 
+### Roadmap Evolution
+
+- Phase 6 added: support regexp title
+
 ---
 
 ## Session Continuity
 
-**Last Action:** Completed plan 05-03 - highlight mode wired into main.rs with JSON export, 30 tests green
-**Next Action:** Phase 5 complete - all v1.0 requirements satisfied
+**Last Action:** Completed plan 06-01 - core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests
+**Next Action:** Plan 06-02 - wire --regexp flag into main.rs for end-to-end regex targeting
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -159,6 +167,7 @@ None currently.
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 01 complete: json_export module with serde serialization |
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 02 complete: highlight overlay for all platforms with 4-window border system |
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 03 complete: highlight mode wired into main.rs with JSON export, 30 tests green |
+| 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 01 complete: core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests |
 
 ---
 
