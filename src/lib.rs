@@ -5,7 +5,9 @@
 
 pub mod cli;
 pub mod error;
+pub mod json_export;
 pub mod platform;
 pub mod window;
 pub mod window_service;
 pub mod capture_service;
+pub mod highlight_service;
