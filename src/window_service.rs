@@ -1,5 +1,6 @@
 use crate::error::AppError;
 use crate::window::WindowInfo;
+use regex::Regex;
 
 /// Find a window by name using case-insensitive substring matching.
 /// Checks both the window title and app name.
@@ -39,6 +40,27 @@ pub fn print_available_windows(windows: &[WindowInfo]) {
     for w in windows {
         eprintln!("  {}", w);
     }
+}
+
+/// Find windows by regular expression pattern matching on title or app_name.
+/// Returns all matching windows for disambiguation when multiple match.
+pub fn find_by_regexp<'a>(
+    windows: &'a [WindowInfo],
+    pattern: &str,
+) -> Result<Vec<&'a WindowInfo>, AppError> {
+    let re = Regex::new(pattern)
+        .map_err(|e| AppError::invalid_regex_pattern(pattern, &e.to_string()))?;
+
+    let matches: Vec<&WindowInfo> = windows
+        .iter()
+        .filter(|w| re.is_match(&w.title) || re.is_match(&w.app_name))
+        .collect();
+
+    if matches.is_empty() {
+        return Err(AppError::window_not_found(pattern));
+    }
+
+    Ok(matches)
 }
 
 #[cfg(test)]
@@ -147,5 +169,113 @@ mod tests {
     fn test_find_by_index_empty_list() {
         let result = find_by_index(&[], 0);
         assert!(result.is_err());
+    }
+
+    // REGEXP-02: Valid regex pattern returns matching windows (title match)
+    #[test]
+    fn test_find_by_regexp_title_match() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, "Firefox.*");
+        assert!(result.is_ok());
+        let matches = result.unwrap();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0].title, "Firefox - Wikipedia");
+    }
+
+    // REGEXP-02: Valid regex pattern returns matching windows (app_name match)
+    #[test]
+    fn test_find_by_regexp_app_name_match() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, "iTerm.*");
+        assert!(result.is_ok());
+        let matches = result.unwrap();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0].app_name, "iTerm2");
+    }
+
+    // REGEXP-03: Case-insensitive matching using (?i) flag works
+    #[test]
+    fn test_find_by_regexp_case_insensitive() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, "(?i)firefox");
+        assert!(result.is_ok());
+        let matches = result.unwrap();
+        assert_eq!(matches.len(), 1);
+        assert_eq!(matches[0].title, "Firefox - Wikipedia");
+    }
+
+    // REGEXP-04: Invalid regex pattern returns InvalidRegexPattern error
+    #[test]
+    fn test_find_by_regexp_invalid_pattern() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, "[invalid");
+        assert!(result.is_err());
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("Invalid regex pattern"));
+        assert!(err.contains("[invalid"));
+    }
+
+    // REGEXP-02: No matches returns WindowNotFound error with pattern
+    #[test]
+    fn test_find_by_regexp_no_matches() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, "NonExistentPattern12345");
+        assert!(result.is_err());
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("NonExistentPattern12345"));
+    }
+
+    // REGEXP-02: Multiple matches returns all matching windows (Vec, not single)
+    #[test]
+    fn test_find_by_regexp_multiple_matches() {
+        let windows = sample_windows();
+        // "Term" matches both "Terminal" (title) and "iTerm2" (app_name)
+        let result = find_by_regexp(&windows, "Term.*");
+        assert!(result.is_ok());
+        let matches = result.unwrap();
+        assert_eq!(matches.len(), 2);
+        // Should find Terminal by title and iTerm2 by app_name
+        let titles: Vec<_> = matches.iter().map(|w| w.title.as_str()).collect();
+        assert!(titles.contains(&"Terminal"));
+        assert!(titles.contains(&"Code - main.rs"));
+    }
+
+    // REGEXP-02: Regex metacharacters work correctly (.*, +, [], etc.)
+    #[test]
+    fn test_find_by_regexp_metacharacters() {
+        let windows = sample_windows();
+        // Test .* wildcard
+        let result = find_by_regexp(&windows, "Fire.*Wiki.*");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 1);
+
+        // Test character class [] with case-insensitive flag
+        let result = find_by_regexp(&windows, "(?i)[ft]irefox");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 1);
+
+        // Test + quantifier (one or more dashes)
+        let result = find_by_regexp(&windows, "Code +- +main");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 1);
+
+        // Test ^ anchor (start of string)
+        let result = find_by_regexp(&windows, "^Firefox");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 1);
+
+        // Test $ anchor (end of string)
+        let result = find_by_regexp(&windows, "Terminal$");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 1);
+    }
+
+    // REGEXP-02: Empty pattern matches everything (including empty strings)
+    #[test]
+    fn test_find_by_regexp_empty_pattern() {
+        let windows = sample_windows();
+        let result = find_by_regexp(&windows, ".*");
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().len(), 3);
     }
 }
