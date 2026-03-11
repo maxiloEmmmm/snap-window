@@ -211,9 +211,7 @@ pub fn show_highlight_border(info: &WindowInfo) -> Result<()> {
     // SAFETY: NSApplication sharedApplication is safe to call once per process
     let mtm = MainThreadMarker::new().expect("Must be on main thread");
     let app = NSApplication::sharedApplication(mtm);
-    unsafe {
-        app.setActivationPolicy(NSApplicationActivationPolicy::Accessory);
-    }
+    app.setActivationPolicy(NSApplicationActivationPolicy::Accessory);
 
     // Get screen height for coordinate conversion (Quartz -> Cocoa)
     // SAFETY: mainScreen returns optional, unwrap with fallback
@@ -289,9 +287,7 @@ pub fn show_highlight_border(info: &WindowInfo) -> Result<()> {
 
     // Show all windows
     for window in &windows {
-        unsafe {
-            window.orderFrontRegardless();
-        }
+        window.orderFrontRegardless();
     }
 
     // Keep windows visible for 3 seconds
