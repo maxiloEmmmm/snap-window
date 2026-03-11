@@ -1,6 +1,7 @@
 use anyhow::{Context, Result};
 use clap::Parser;
 
+mod capture_service;
 mod cli;
 mod error;
 pub mod platform;
@@ -38,8 +39,8 @@ fn run() -> Result<()> {
 
             match window_service::find_by_name(&windows, &name) {
                 Ok(w) => {
-                    println!("Found window: {}", w);
-                    println!("Output path: {}", output_path.display());
+                    capture_service::capture_window(w, &output_path)?;
+                    println!("Saved screenshot to: {}", output_path.display());
                 }
                 Err(e) => {
                     window_service::print_available_windows(&windows);
@@ -53,8 +54,8 @@ fn run() -> Result<()> {
 
             match window_service::find_by_pid(&windows, pid) {
                 Ok(w) => {
-                    println!("Found window: {}", w);
-                    println!("Output path: {}", output_path.display());
+                    capture_service::capture_window(w, &output_path)?;
+                    println!("Saved screenshot to: {}", output_path.display());
                 }
                 Err(e) => {
                     window_service::print_available_windows(&windows);
@@ -68,8 +69,8 @@ fn run() -> Result<()> {
 
             match window_service::find_by_index(&windows, index) {
                 Ok(w) => {
-                    println!("Selected window: {}", w);
-                    println!("Output path: {}", output_path.display());
+                    capture_service::capture_window(w, &output_path)?;
+                    println!("Saved screenshot to: {}", output_path.display());
                 }
                 Err(e) => {
                     window_service::print_available_windows(&windows);
