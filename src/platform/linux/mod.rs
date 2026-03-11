@@ -7,7 +7,7 @@
 //!
 //! - `detector`: Runtime display server detection (X11 vs Wayland)
 //! - `x11`: X11 backend implementation using x11rb
-//! - `wayland`: Wayland backend implementation (future)
+//! - `wayland`: Wayland backend implementation using foreign-toplevel protocol
 //!
 //! # Usage
 //!
@@ -26,6 +26,7 @@ pub mod x11;
 pub mod wayland;
 
 use detector::{detect_display_server, DisplayServer};
+use wayland::WaylandBackend;
 
 /// Trait for Linux platform backends
 ///
@@ -48,7 +49,8 @@ pub trait LinuxBackend {
 /// Create the appropriate backend for the current display server
 ///
 /// Detects the display server at runtime and returns a boxed backend
-/// implementation. Currently supports X11; Wayland support is planned.
+/// implementation. Supports both Wayland (with foreign-toplevel protocol)
+/// and X11 backends, with automatic fallback from Wayland to X11.
 ///
 /// # Errors
 ///
@@ -68,23 +70,31 @@ pub trait LinuxBackend {
 /// ```
 pub fn create_backend() -> Result<Box<dyn LinuxBackend>> {
     match detect_display_server() {
+        DisplayServer::Wayland => {
+            // Try Wayland native backend first
+            match WaylandBackend::new() {
+                Ok(backend) => return Ok(Box::new(backend)),
+                Err(e) => {
+                    log::debug!("Wayland backend failed: {}, trying X11 fallback", e);
+                    // Fall through to X11 fallback
+                }
+            }
+
+            // X11 fallback for XWayland
+            match x11::X11Backend::new() {
+                Ok(backend) => Ok(Box::new(backend)),
+                Err(_) => Err(crate::error::AppError::enumeration_failed(
+                    "Wayland backend failed and X11 fallback unavailable"
+                ).into())
+            }
+        }
         DisplayServer::X11 => {
             let backend = x11::X11Backend::new()?;
             Ok(Box::new(backend))
         }
-        DisplayServer::Wayland => {
-            // For now, try X11 fallback (XWayland) when on Wayland
-            // Future: implement native Wayland backend
-            match x11::X11Backend::new() {
-                Ok(backend) => Ok(Box::new(backend)),
-                Err(_) => Err(crate::error::AppError::enumeration_failed(
-                    "Wayland native backend not yet implemented. XWayland fallback failed."
-                ).into())
-            }
-        }
         DisplayServer::Unknown => {
             Err(crate::error::AppError::enumeration_failed(
-                "No supported display server found (tried X11, Wayland)"
+                "No supported display server found (tried Wayland, X11)"
             ).into())
         }
     }
