@@ -1,10 +1,10 @@
 # Roadmap: snap-window
 
 **Granularity:** Fine
-**Total Phases:** 7
+**Total Phases:** 8
 **Total Requirements:** 38 v1/v2 requirements
 **Created:** 2026-03-10
-**Last Updated:** 2026-03-11
+**Last Updated:** 2026-03-12
 
 ---
 
@@ -16,7 +16,8 @@
 - [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
 - [x] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export (completed 2026-03-11)
 - [~] **Phase 6: Support Regexp Title** - Regular expression pattern matching for window targeting (1/2 plans complete)
-- [~] **Phase 7: Support Wayland** - Native Wayland support via XDG Desktop Portal with runtime X11/Wayland detection (2/3 plans complete)
+- [~] **Phase 7: Support Wayland** - Native Wayland support via XDG Desktop Portal with runtime X11/Wayland detection (3/3 plans complete)
+- [ ] **Phase 8: Wayland Highlight and Cleanup** - Gap closure: Wayland highlight mode, dead code removal, compiler warning cleanup
 
 ---
 
@@ -182,7 +183,31 @@
 **Plan list:**
 - [x] 07-01-PLAN.md — Runtime detection and backend selection (LIN-02) - Refactor linux.rs into backend trait pattern with detector
 - [x] 07-02-PLAN.md — Wayland window enumeration via foreign-toplevel (LIN-01) - Implement WaylandBackend with wlr-foreign-toplevel protocol
-- [ ] 07-03-PLAN.md — Wayland screenshot capture via XDG Desktop Portal (LIN-01) - Integrate ashpd for portal-based capture
+- [x] 07-03-PLAN.md — Wayland screenshot capture via XDG Desktop Portal (LIN-01) - Integrate ashpd for portal-based capture
+
+---
+
+### Phase 8: Wayland Highlight and Cleanup
+
+**Goal:** Close gaps identified in milestone audit: implement Wayland highlight mode, clean up dead code, fix compiler warnings.
+
+**Depends on:** Phase 7
+
+**Requirements:** HIL-04 (partial)
+
+**Gap Closure:** Closes gaps from v1.5-MILESTONE-AUDIT.md
+
+**Success Criteria** (what must be TRUE):
+1. `--highlight` flag works on native Wayland sessions
+2. Red border overlay displays around target window on Wayland
+3. All compiler warnings resolved (dead code, unused unsafe blocks)
+4. Code quality improved without functional changes
+
+**Plans:** 2/2 plans created
+
+**Plan list:**
+- [x] 08-01-PLAN.md — Clean up dead code and compiler warnings
+- [ ] 08-02-PLAN.md — Implement Wayland highlight mode using layer-shell protocol (HIL-04)
 
 ---
 
@@ -197,6 +222,7 @@
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 | 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
 | 7. Support Wayland | 3/3 | Complete   | 2026-03-11 |
+| 8. Wayland Highlight | 1/2 | In Progress | 2026-03-11 |
 
 ---
 
@@ -222,6 +248,9 @@ Phase 6 (Support Regexp Title)
     |
     v
 Phase 7 (Support Wayland)
+    |
+    v
+Phase 8 (Wayland Highlight and Cleanup)
 ```
 
 ---
@@ -233,7 +262,8 @@ Phase 7 (Support Wayland)
 | Core CLI | CLI-01 to CLI-08 | Phase 1, 4 |
 | Window Operations | WIN-01 to WIN-06 | Phase 2, 3 |
 | Screenshot Capture | CAP-01 to CAP-04 | Phase 4 |
-| Highlight Mode | HIL-01 to HIL-04 | Phase 5 |
+| Highlight Mode | HIL-01 to HIL-03 | Phase 5 |
+| Highlight Mode | HIL-04 | Phase 8 |
 | Window Info JSON | JSON-01 to JSON-05 | Phase 5 |
 | Error Handling | ERR-01 to ERR-04 | Phase 1, 3, 4 |
 | Regexp Matching | REGEXP-01 to REGEXP-06 | Phase 6 |
@@ -249,4 +279,4 @@ Phase 7 (Support Wayland)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-11 (Phase 7 Plan 02 complete)*
+*Last updated: 2026-03-12 (Phase 8 plans created)*

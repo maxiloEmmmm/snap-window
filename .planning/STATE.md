@@ -1,24 +1,24 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
+milestone: v1.5
 milestone_name: milestone
-current_phase: 7
-current_plan: 3
-status: in_progress
-last_updated: "2026-03-11T15:46:23Z"
+current_phase: 08
+current_plan: 02
+status: in-progress
+last_updated: "2026-03-11T16:24:06Z"
 progress:
-  total_phases: 7
-  completed_phases: 6
-  total_plans: 13
-  completed_plans: 13
+  total_phases: 8
+  completed_phases: 7
+  total_plans: 17
+  completed_plans: 17
 ---
 
 # Project State: snap-window
 
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
-**Current Phase:** 7
-**Current Plan:** 1
+**Current Phase:** 08
+**Current Plan:** 02
 **Status:** In Progress
 **Last Updated:** 2026-03-11
 
@@ -29,13 +29,14 @@ progress:
 ```
 [██████████] 100% - Phase 4 complete (8/8 plans complete)
 
-Phase 1: Foundation         [██████████] 100% - 3/3 plans complete
-Phase 2: Window Discovery   [██████████] 100% - 2/2 plans complete
-Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
-Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
-Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
-Phase 6: Support Regexp     [██████████] 100% - 2/2 plans complete
-Phase 7: Support Wayland    [██████████] 100% - 3/3 plans complete
+Phase 1: Foundation              [██████████] 100% - 3/3 plans complete
+Phase 2: Window Discovery        [██████████] 100% - 2/2 plans complete
+Phase 3: Window Targeting        [██████████] 100% - 1/1 plans complete
+Phase 4: Screenshot Capture      [██████████] 100% - 2/2 plans complete
+Phase 5: Highlight Mode          [██████████] 100% - 3/3 plans complete
+Phase 6: Support Regexp          [██████████] 100% - 2/2 plans complete
+Phase 7: Support Wayland         [██████████] 100% - 3/3 plans complete
+Phase 8: Wayland Highlight Cleanup [███░░░░░░░] 33% - 1/3 plans complete
 ```
 
 ---
@@ -156,8 +157,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 07-03 - implemented Wayland screenshot capture using XDG Desktop Portal, extended LinuxBackend trait with capture_window
-**Next Action:** Phase 7 complete - all Wayland support implemented
+**Last Action:** Completed plan 08-01 - removed dead code from error.rs, fixed unnecessary unsafe blocks in macos.rs
+**Next Action:** Continue with plan 08-02
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -187,6 +188,7 @@ None currently.
 | 07-support-wayland | 2026-03-11 | - | Plan 01 complete: refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade |
 | 07-support-wayland | 2026-03-11 | - | Plan 02 complete: WaylandBackend with foreign-toplevel protocol, window enumeration on wlroots compositors |
 | 07-support-wayland | 2026-03-11 | - | Plan 03 complete: Wayland screenshot capture via XDG Desktop Portal, LinuxBackend trait extended with capture_window |
+| 08-wayland-highlight-cleanup | 2026-03-11 | - | Plan 01 complete: removed dead code (UnsupportedPlatform variant), fixed unnecessary unsafe blocks in macos.rs, zero targeted warnings |
 
 ---
 
