@@ -3,23 +3,23 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 6
-current_plan: 1
+current_plan: 2
 status: in_progress
-last_updated: "2026-03-11T14:31:00Z"
+last_updated: "2026-03-11T14:36:00Z"
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 12
-  completed_plans: 11
+  total_plans: 13
+  completed_plans: 12
 ---
 
 # Project State: snap-window
 
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
-**Current Phase:** 5
-**Current Plan:** 3
-**Status:** Completed
+**Current Phase:** 6
+**Current Plan:** 2
+**Status:** Completed (awaiting human verification)
 **Last Updated:** 2026-03-11
 
 ---
@@ -34,7 +34,7 @@ Phase 2: Window Discovery   [██████████] 100% - 2/2 plans co
 Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
-Phase 6: Support Regexp     [░░░░░░░░░░] 0% - 0/1 plans complete
+Phase 6: Support Regexp     [██████████] 100% - 2/2 plans complete
 ```
 
 ---
@@ -77,6 +77,8 @@ Phase 6: Support Regexp     [░░░░░░░░░░] 0% - 0/1 plans comp
 | Phase 05-highlight-mode P01 | 5 min | 1 tasks | 4 files |
 | Phase 05-highlight-mode P02 | 25 min | 2 tasks | 7 files |
 | Phase 05-highlight-mode P03 | 5 min | 2 tasks | 2 files |
+| Phase 06-support-regexp-title P01 | 8 min | 3 tasks | 4 files |
+| Phase 06-support-regexp-title P02 | 7 min | 2 tasks | 2 files |
 
 ### Execution Metrics
 
@@ -118,6 +120,9 @@ Phase 6: Support Regexp     [░░░░░░░░░░] 0% - 0/1 plans comp
 | 2026-03-11 | Regex crate 1.12 for pattern matching | Industry standard, excellent performance |
 | 2026-03-11 | Return Vec from find_by_regexp | Multiple matches possible; caller handles disambiguation |
 | 2026-03-11 | User-controlled case sensitivity | (?i) flag gives users full control vs forced case-insensitive |
+| 2026-03-11 | Separate empty match arm | Consistent UX - always show window list on "not found" |
+| 2026-03-11 | Disambiguation to stderr | User-facing info belongs on stderr, not stdout |
+| 2026-03-11 | Dual-outcome test pattern | Tests work in both headless CI and desktop environments |
 
 ### Open Questions
 
@@ -141,8 +146,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 06-01 - core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests
-**Next Action:** Plan 06-02 - wire --regexp flag into main.rs for end-to-end regex targeting
+**Last Action:** Completed plan 06-02 - wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests
+**Next Action:** Human verification of --regexp feature (checkpoint reached)
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -168,6 +173,7 @@ None currently.
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 02 complete: highlight overlay for all platforms with 4-window border system |
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 03 complete: highlight mode wired into main.rs with JSON export, 30 tests green |
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 01 complete: core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests |
+| 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests |
 
 ---
 

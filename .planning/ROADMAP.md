@@ -151,7 +151,7 @@
 5. Case-insensitive matching available via `(?i)` inline flag
 6. Pattern matches both window title and application name
 
-**Plans:** 1/2 plans complete
+**Plans:** 2/2 plans complete
 
 **Plan list:**
 - [x] 06-01-PLAN.md — Add regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag (REGEXP-01, REGEXP-02, REGEXP-03, REGEXP-04)
@@ -168,7 +168,7 @@
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
-| 6. Support Regexp Title | 1/2 | In Progress | 2026-03-11 |
+| 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
 
 ---
 
