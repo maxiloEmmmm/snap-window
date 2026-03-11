@@ -19,6 +19,7 @@
 //! ```
 
 use anyhow::Result;
+use std::path::Path;
 use crate::window::WindowInfo;
 
 pub mod detector;
@@ -30,7 +31,7 @@ use wayland::WaylandBackend;
 
 /// Trait for Linux platform backends
 ///
-/// Implementations provide window enumeration and highlight functionality
+/// Implementations provide window enumeration, highlight, and capture functionality
 /// for specific display servers (X11, Wayland, etc.).
 pub trait LinuxBackend {
     /// List all visible windows
@@ -44,6 +45,11 @@ pub trait LinuxBackend {
     /// Creates a temporary visual indicator (typically a colored border)
     /// around the target window to help users identify it.
     fn show_highlight_border(&self, info: &WindowInfo) -> Result<()>;
+
+    /// Capture a screenshot of the specified window
+    ///
+    /// Saves the captured image as a PNG file to the given output path.
+    fn capture_window(&self, info: &WindowInfo, output_path: &Path) -> Result<()>;
 }
 
 /// Create the appropriate backend for the current display server

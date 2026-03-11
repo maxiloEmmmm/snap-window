@@ -1,7 +1,7 @@
 //! Capture service — takes a WindowInfo and output path, produces a PNG screenshot.
 //!
-//! Uses xcap to enumerate system windows, correlate by window ID (with title+pid fallback),
-//! and capture the window contents to a PNG file.
+//! On Linux, uses the platform backend (X11 or Wayland) for capture.
+//! On other platforms, uses xcap directly.
 
 use std::path::Path;
 
@@ -13,13 +13,33 @@ use crate::window::WindowInfo;
 
 /// Capture a screenshot of the window described by `info` and save as PNG to `output`.
 ///
+/// Platform-specific behavior:
+/// - Linux: Uses backend abstraction (X11 via xcap or Wayland via portal)
+/// - Other platforms: Uses xcap directly
+pub fn capture_window(info: &WindowInfo, output: &Path) -> Result<()> {
+    #[cfg(target_os = "linux")]
+    {
+        use crate::platform::linux::{create_backend, LinuxBackend};
+        let backend = create_backend()
+            .map_err(|e| AppError::capture_failed(format!("Failed to initialize platform backend: {}", e)))?;
+        return backend.capture_window(info, output);
+    }
+
+    #[cfg(not(target_os = "linux"))]
+    {
+        capture_with_xcap(info, output)
+    }
+}
+
+/// Capture using xcap (used on non-Linux platforms and X11 backend)
+///
 /// Steps:
 /// 1. Enumerate all xcap windows
 /// 2. Find matching window by ID (fallback: title+pid)
 /// 3. Check if minimized
 /// 4. Capture image, detecting permission errors
 /// 5. Create parent directories and save PNG
-pub fn capture_window(info: &WindowInfo, output: &Path) -> Result<()> {
+pub fn capture_with_xcap(info: &WindowInfo, output: &Path) -> Result<()> {
     let xcap_windows = XCapWindow::all()
         .context("Failed to enumerate windows for capture")?;
 

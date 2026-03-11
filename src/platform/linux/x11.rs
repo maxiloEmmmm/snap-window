@@ -8,6 +8,7 @@ use crate::error::AppError;
 use crate::window::WindowInfo;
 use super::LinuxBackend;
 
+use std::path::Path;
 use std::thread;
 use std::time::Duration;
 use x11rb::{
@@ -381,6 +382,70 @@ impl LinuxBackend for X11Backend {
         self.conn
             .flush()
             .map_err(|e| AppError::platform_error(format!("Failed to flush after destroy: {}", e)))?;
+
+        Ok(())
+    }
+
+    /// Capture a screenshot of the window using xcap
+    ///
+    /// Uses xcap to capture the window contents and save as PNG.
+    fn capture_window(&self, info: &WindowInfo, output_path: &Path) -> Result<()> {
+        use xcap::Window as XCapWindow;
+
+        let xcap_windows = XCapWindow::all()
+            .context("Failed to enumerate windows for capture")?;
+
+        // ID correlation: xcap returns u32, WindowInfo stores u64; fallback to title+pid if no ID match
+        let xcap_win = xcap_windows
+            .iter()
+            .find(|w| w.id().unwrap_or(0) as u64 == info.window_id)
+            .or_else(|| {
+                xcap_windows.iter().find(|w| {
+                    w.title().ok().as_deref() == Some(info.title.as_str())
+                        && w.pid().ok() == Some(info.pid)
+                })
+            })
+            .ok_or_else(|| {
+                anyhow::anyhow!(AppError::capture_failed(format!(
+                    "Window '{}' (id={}) not found for capture",
+                    info.title, info.window_id
+                )))
+            })?;
+
+        // Check if window is minimized
+        if xcap_win.is_minimized().unwrap_or(false) {
+            return Err(anyhow::anyhow!(AppError::capture_failed(
+                "Cannot capture minimized window — restore the window and retry"
+            )));
+        }
+
+        // Capture image, detecting permission errors
+        let image = match xcap_win.capture_image() {
+            Ok(img) => img,
+            Err(e) => {
+                let msg = e.to_string().to_lowercase();
+                if msg.contains("permission")
+                    || msg.contains("screen recording")
+                    || msg.contains("not permitted")
+                    || msg.contains("access denied")
+                {
+                    return Err(anyhow::anyhow!(AppError::permission_denied(e.to_string())));
+                }
+                return Err(anyhow::anyhow!(AppError::capture_failed(e.to_string())));
+            }
+        };
+
+        // Create parent directories if needed
+        if let Some(parent) = output_path.parent() {
+            if !parent.as_os_str().is_empty() {
+                std::fs::create_dir_all(parent)?;
+            }
+        }
+
+        // Save PNG
+        image
+            .save(output_path)
+            .with_context(|| format!("Failed to write PNG to {}", output_path.display()))?;
 
         Ok(())
     }
