@@ -8,6 +8,8 @@ use crate::error::AppError;
 use crate::window::WindowInfo;
 use super::LinuxBackend;
 
+mod layer_shell;
+
 use std::path::Path;
 
 use wayland_client::{
@@ -181,10 +183,16 @@ impl LinuxBackend for WaylandBackend {
 
     /// Show a highlight border around a window
     ///
-    /// Note: This is not yet implemented for Wayland as it requires
-    /// compositor-specific protocols (layer-shell) for overlay windows.
-    fn show_highlight_border(&self, _info: &WindowInfo) -> Result<()> {
-        anyhow::bail!("Highlight border not yet supported on Wayland")
+    /// Uses the layer-shell protocol to create overlay borders around windows.
+    /// Works on wlroots-based compositors (Sway, Hyprland, etc.).
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - The layer-shell protocol is not available (non-wlroots compositor)
+    /// - Window geometry is not available (foreign-toplevel doesn't provide position/size)
+    fn show_highlight_border(&self, info: &WindowInfo) -> Result<()> {
+        layer_shell::show_highlight_border_layer_shell(&self.connection, info)
     }
 
     /// Capture a screenshot of the window using XDG Desktop Portal
