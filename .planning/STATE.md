@@ -2,24 +2,24 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 6
-current_plan: 2
+current_phase: 7
+current_plan: 1
 status: in_progress
-last_updated: "2026-03-11T14:36:00Z"
+last_updated: "2026-03-11T15:51:00Z"
 progress:
-  total_phases: 6
-  completed_phases: 5
+  total_phases: 7
+  completed_phases: 6
   total_plans: 13
-  completed_plans: 12
+  completed_plans: 13
 ---
 
 # Project State: snap-window
 
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
-**Current Phase:** 6
-**Current Plan:** 2
-**Status:** Completed (awaiting human verification)
+**Current Phase:** 7
+**Current Plan:** 1
+**Status:** In Progress
 **Last Updated:** 2026-03-11
 
 ---
@@ -35,6 +35,7 @@ Phase 3: Window Targeting   [██████████] 100% - 1/1 plans co
 Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [██████████] 100% - 3/3 plans complete
 Phase 6: Support Regexp     [██████████] 100% - 2/2 plans complete
+Phase 7: Support Wayland    [███       ] 33% - 1/3 plans complete
 ```
 
 ---
@@ -123,6 +124,8 @@ Phase 6: Support Regexp     [██████████] 100% - 2/2 plans co
 | 2026-03-11 | Separate empty match arm | Consistent UX - always show window list on "not found" |
 | 2026-03-11 | Disambiguation to stderr | User-facing info belongs on stderr, not stdout |
 | 2026-03-11 | Dual-outcome test pattern | Tests work in both headless CI and desktop environments |
+| 2026-03-11 | Backend trait pattern for Linux | Enables runtime X11/Wayland selection; X11Backend implements LinuxBackend trait |
+| 2026-03-11 | Prefer Wayland over X11 when both available | Handles XWayland case correctly; native Wayland preferred |
 
 ### Open Questions
 
@@ -141,13 +144,14 @@ None currently.
 ### Roadmap Evolution
 
 - Phase 6 added: support regexp title
+- Phase 7 added: support wayland
 
 ---
 
 ## Session Continuity
 
-**Last Action:** Completed plan 06-02 - wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests
-**Next Action:** Human verification of --regexp feature (checkpoint reached)
+**Last Action:** Completed plan 07-01 - refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade
+**Next Action:** Plan 07-02 - implement native Wayland backend
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -174,6 +178,7 @@ None currently.
 | 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 03 complete: highlight mode wired into main.rs with JSON export, 30 tests green |
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 01 complete: core regex support with regex crate, InvalidRegexPattern error, find_by_regexp function, --regexp CLI flag, 11 new tests |
 | 06-support-regexp-title | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired --regexp into main.rs with single/multiple match handling, disambiguation UI, 10 integration tests |
+| 07-support-wayland | 2026-03-11 | - | Plan 01 complete: refactored Linux platform with backend trait pattern, runtime X11/Wayland detection, backward-compatible facade |
 
 ---
 
