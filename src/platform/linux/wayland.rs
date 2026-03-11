@@ -8,6 +8,8 @@ use crate::error::AppError;
 use crate::window::WindowInfo;
 use super::LinuxBackend;
 
+use std::path::Path;
+
 use wayland_client::{
     Connection, Dispatch, QueueHandle,
     protocol::{wl_registry, wl_display},
@@ -183,6 +185,56 @@ impl LinuxBackend for WaylandBackend {
     /// compositor-specific protocols (layer-shell) for overlay windows.
     fn show_highlight_border(&self, _info: &WindowInfo) -> Result<()> {
         anyhow::bail!("Highlight border not yet supported on Wayland")
+    }
+
+    /// Capture a screenshot of the window using XDG Desktop Portal
+    ///
+    /// Uses the portal Screenshot API to capture the screen on Wayland.
+    /// The portal saves to a temporary location which is then copied to
+    /// the requested output path.
+    fn capture_window(&self, _info: &WindowInfo, output_path: &Path) -> Result<()> {
+        use ashpd::desktop::screenshot::{Screenshot, Options};
+        use ashpd::WindowIdentifier;
+        use std::path::PathBuf;
+
+        // Create tokio runtime for async portal operation
+        let rt = tokio::runtime::Runtime::new()
+            .map_err(|e| AppError::capture_failed(format!("Failed to create tokio runtime: {}", e)))?;
+
+        let portal_path: PathBuf = rt.block_on(async {
+            let screenshot = Screenshot::new().await
+                .map_err(|e| map_portal_error(e))?;
+
+            let options = Options::default()
+                .interactive(false)  // Don't show region selection dialog
+                .modal(false);
+
+            let uri = screenshot.screenshot(WindowIdentifier::default(), options).await
+                .map_err(|e| map_portal_error(e))?;
+
+            Ok::<_, AppError>(PathBuf::from(uri.path()))
+        }).map_err(|e| anyhow::anyhow!(e))?;
+
+        // Portal saves to a temp location, copy to user's requested path
+        std::fs::copy(&portal_path, output_path)
+            .map_err(|e| AppError::capture_failed(format!("Failed to copy screenshot to output path: {}", e)))?;
+
+        // Clean up portal's temp file (optional - portal may clean up itself)
+        let _ = std::fs::remove_file(&portal_path);
+
+        Ok(())
+    }
+}
+
+/// Map ashpd portal errors to appropriate AppError variants
+fn map_portal_error(e: ashpd::Error) -> AppError {
+    let msg = e.to_string().to_lowercase();
+    if msg.contains("portal") && (msg.contains("not available") || msg.contains("no such interface")) {
+        AppError::PortalNotAvailable
+    } else if msg.contains("cancelled") || msg.contains("denied") || msg.contains("dismissed") {
+        AppError::PortalPermissionDenied
+    } else {
+        AppError::capture_failed(format!("Portal error: {}", e))
     }
 }
 

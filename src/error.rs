@@ -33,6 +33,14 @@ pub enum AppError {
     /// Invalid regex pattern provided by user
     #[error("Invalid regex pattern '{pattern}': {details}")]
     InvalidRegexPattern { pattern: String, details: String },
+
+    /// XDG Desktop Portal not available (Wayland)
+    #[error("XDG Desktop Portal not available. Install xdg-desktop-portal and a backend (xdg-desktop-portal-gtk or xdg-desktop-portal-kde)")]
+    PortalNotAvailable,
+
+    /// Screenshot permission denied via portal (Wayland)
+    #[error("Screenshot permission denied via portal. Grant permission in the dialog or system settings")]
+    PortalPermissionDenied,
 }
 
 impl AppError {
