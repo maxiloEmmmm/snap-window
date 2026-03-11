@@ -34,18 +34,18 @@
 
 ### Highlight Mode
 
-- [ ] **HIL-01**: Red border overlay around specified window
-- [ ] **HIL-02**: Border is visual only — not included in saved screenshot
+- [x] **HIL-01**: Red border overlay around specified window
+- [x] **HIL-02**: Border is visual only — not included in saved screenshot
 - [ ] **HIL-03**: Highlight mode saves window info as JSON only (no screenshot)
-- [ ] **HIL-04**: JSON output path follows same logic as `--output` (same name, .json extension)
+- [x] **HIL-04**: JSON output path follows same logic as `--output` (same name, .json extension)
 
 ### Window Info JSON
 
-- [ ] **JSON-01**: JSON contains platform-specific window attributes
-- [ ] **JSON-02**: Common fields: window_id, title, pid, app_name, x, y, width, height
-- [ ] **JSON-03**: Windows fields: hwnd, window_class, thread_id
-- [ ] **JSON-04**: macOS fields: window_number, owner_name, owner_pid, sharing_state
-- [ ] **JSON-05**: Linux X11 fields: xid, wm_class, wm_window_role, visual_info
+- [x] **JSON-01**: JSON contains platform-specific window attributes
+- [x] **JSON-02**: Common fields: window_id, title, pid, app_name, x, y, width, height
+- [x] **JSON-03**: Windows fields: hwnd, window_class, thread_id
+- [x] **JSON-04**: macOS fields: window_number, owner_name, owner_pid, sharing_state
+- [x] **JSON-05**: Linux X11 fields: xid, wm_class, wm_window_role, visual_info
 
 ### Error Handling
 
@@ -102,15 +102,15 @@
 | CAP-02 | Phase 4 | Complete |
 | CAP-03 | Phase 4 | Complete |
 | CAP-04 | Phase 4 | Complete |
-| HIL-01 | Phase 5 | Pending |
-| HIL-02 | Phase 5 | Pending |
+| HIL-01 | Phase 5 | Complete |
+| HIL-02 | Phase 5 | Complete |
 | HIL-03 | Phase 5 | Pending |
-| HIL-04 | Phase 5 | Pending |
-| JSON-01 | Phase 5 | Pending |
-| JSON-02 | Phase 5 | Pending |
-| JSON-03 | Phase 5 | Pending |
-| JSON-04 | Phase 5 | Pending |
-| JSON-05 | Phase 5 | Pending |
+| HIL-04 | Phase 5 | Complete |
+| JSON-01 | Phase 5 | Complete |
+| JSON-02 | Phase 5 | Complete |
+| JSON-03 | Phase 5 | Complete |
+| JSON-04 | Phase 5 | Complete |
+| JSON-05 | Phase 5 | Complete |
 | ERR-01 | Phase 1 | Complete |
 | ERR-02 | Phase 1 | Complete |
 | ERR-03 | Phase 1 | Complete |

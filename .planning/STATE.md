@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 5
-current_plan: 1
+current_plan: 2
 status: executing
-last_updated: "2026-03-11T11:48:00Z"
+last_updated: "2026-03-11T13:49:00Z"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 6
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
 ---
 
 # Project State: snap-window
@@ -73,6 +73,8 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | Screenshot capture | < 1s | - |
 | Binary size | < 10MB | - |
 | Platforms passing tests | 3/3 | - |
+| Phase 05-highlight-mode P01 | 5 min | 1 tasks | 4 files |
+| Phase 05-highlight-mode P02 | 25 min | 2 tasks | 7 files |
 
 ### Execution Metrics
 
@@ -109,6 +111,8 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-11 | Permission error keyword detection | Lowercase string matching for macOS Screen Recording errors |
 | 2026-03-11 | Unified success message format | "Saved screenshot to: {path}" across all targeting arms |
 | 2026-03-11 | Dual-outcome integration tests | Tests accept both success and graceful failure for headless CI |
+| 2026-03-11 | Added objc2 v0.6 dependency | Required for MainThreadOnly trait access in highlight overlay |
+| 2026-03-11 | Quartz to Cocoa coordinate conversion | Critical for correct NSWindow positioning on macOS |
 
 ### Open Questions
 
@@ -128,8 +132,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 04-02 - wired capture_service into main.rs, 3 new CLI integration tests, 55 total tests green
-**Next Action:** Execute Phase 05 - Highlight Mode
+**Last Action:** Completed plan 05-02 - highlight overlay for all platforms, highlight_service orchestration, 57 total tests green
+**Next Action:** Execute Phase 05 Plan 03 - Wire highlight into CLI
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -151,6 +155,8 @@ None currently.
 | 03-window-targeting | 2026-03-10 | 2026-03-10 | Plan 01 complete: window_service module with case-insensitive matching, underflow guard, auto-list delegation |
 | 04-screenshot-capture | 2026-03-11 | - | Plan 01 complete: capture_service with xcap 0.9, ID correlation, permission detection, 4 unit tests |
 | 04-screenshot-capture | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired capture_service into main.rs, 3 new CLI tests, 55 total tests |
+| 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 01 complete: json_export module with serde serialization |
+| 05-highlight-mode | 2026-03-11 | 2026-03-11 | Plan 02 complete: highlight overlay for all platforms with 4-window border system |
 
 ---
 
