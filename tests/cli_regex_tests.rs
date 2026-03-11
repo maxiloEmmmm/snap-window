@@ -43,6 +43,7 @@ fn test_regexp_no_matches() {
 
 /// Test that --regexp flag is accepted and processed
 /// Uses dual-outcome pattern: accepts success or graceful failure
+/// Auto-selects first match when multiple windows match
 #[test]
 fn test_regexp_flag_accepted() {
     let mut cmd = Command::cargo_bin("snap-window").unwrap();
@@ -51,12 +52,11 @@ fn test_regexp_flag_accepted() {
     let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
 
-    // Command should run - either success with capture or error with not found/multiple/no match
+    // Command should run - either success with capture or error with not found/capture error
     assert!(
         output.status.success()
             || stdout.contains("Saved screenshot to:")
             || stderr.contains("not found")
-            || stderr.contains("Multiple windows matched")
             || stderr.contains("capture")
             || stderr.contains("Error"),
         "--regexp flag should be accepted and processed, got stdout: {}, stderr: {}",
@@ -65,28 +65,31 @@ fn test_regexp_flag_accepted() {
     );
 }
 
-/// Test that --regexp with broad pattern matching multiple windows shows disambiguation
+/// Test that --regexp with broad pattern auto-selects first match
+/// (No more disambiguation - automatically captures first matching window)
 #[test]
-fn test_regexp_multiple_matches() {
+fn test_regexp_multiple_matches_auto_selects_first() {
     let mut cmd = Command::cargo_bin("snap-window").unwrap();
     // Use a very broad pattern that should match multiple windows
     cmd.arg("--regexp").arg(".*").arg("--output").arg("/tmp/test_multi.png");
     let output = cmd.output().unwrap();
+    let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
 
-    // If multiple windows match, should show disambiguation list
-    if stderr.contains("Multiple windows matched") {
+    // Should NOT show "Multiple windows matched" disambiguation anymore
+    assert!(
+        !stderr.contains("Multiple windows matched"),
+        "Should not show disambiguation - should auto-select first match"
+    );
+
+    // Should either succeed (auto-selecting first) or fail gracefully
+    if output.status.success() {
         assert!(
-            stderr.contains("Use --index to target a specific window"),
-            "Should suggest using --index for disambiguation"
-        );
-        // Should list matching windows with indices
-        assert!(
-            stderr.contains("[") && stderr.contains("]"),
-            "Should show window indices in disambiguation list"
+            stdout.contains("Saved screenshot to:"),
+            "Success should print 'Saved screenshot to:'"
         );
     }
-    // If not multiple matches, test passes (pattern didn't match enough windows)
+    // If fails, it's due to capture error or permission, not disambiguation
 }
 
 /// Test that --regexp is mutually exclusive with --window (clap enforces)
@@ -121,7 +124,6 @@ fn test_regexp_case_insensitive_flag() {
         output.status.success()
             || stdout.contains("Saved screenshot to:")
             || stderr.contains("not found")
-            || stderr.contains("Multiple windows matched")
             || stderr.contains("capture")
             || stderr.contains("Error"),
         "--regexp with (?i) flag should be accepted, got stdout: {}, stderr: {}",
@@ -144,7 +146,6 @@ fn test_regexp_short_flag() {
         output.status.success()
             || stdout.contains("Saved screenshot to:")
             || stderr.contains("not found")
-            || stderr.contains("Multiple windows matched")
             || stderr.contains("capture")
             || stderr.contains("Error"),
         "-r short flag should work, got stdout: {}, stderr: {}",
@@ -195,10 +196,9 @@ fn test_regexp_single_match_pattern() {
             "Success should print 'Saved screenshot to:'"
         );
     } else {
-        // Graceful failure should show error - could be not found, multiple matches,
+        // Graceful failure should show error - could be not found,
         // invalid regex, capture error, or permission error
         let has_error = stderr.contains("not found")
-            || stderr.contains("Multiple windows matched")
             || stderr.contains("Invalid")
             || stderr.contains("capture")
             || stderr.contains("Error")

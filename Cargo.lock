@@ -1964,6 +1964,7 @@ dependencies = [
  "objc2-core-graphics",
  "objc2-foundation",
  "predicates",
+ "regex",
  "serde",
  "serde_json",
  "thiserror 1.0.69",

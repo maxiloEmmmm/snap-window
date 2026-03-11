@@ -52,22 +52,9 @@ fn run() -> Result<()> {
                 .context("Failed to enumerate windows")?;
 
             match window_service::find_by_regexp(&windows, &pattern) {
-                Ok(matches) if matches.len() == 1 => {
-                    capture_service::capture_window(matches[0], &output_path)?;
+                Ok(w) => {
+                    capture_service::capture_window(w, &output_path)?;
                     println!("Saved screenshot to: {}", output_path.display());
-                }
-                Ok(matches) if matches.len() > 1 => {
-                    eprintln!("Multiple windows matched pattern '{}'.", pattern);
-                    for w in &matches {
-                        eprintln!("  [{}] {} (PID: {}, {})", w.index, w.title, w.pid, w.app_name);
-                    }
-                    eprintln!("\nUse --index to target a specific window.");
-                    return Err(error::AppError::window_not_found(pattern).into());
-                }
-                Ok(_) => {
-                    // Empty matches - no windows matched the pattern
-                    window_service::print_available_windows(&windows);
-                    return Err(error::AppError::window_not_found(pattern).into());
                 }
                 Err(e) => {
                     window_service::print_available_windows(&windows);
