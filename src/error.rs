@@ -199,4 +199,22 @@ mod tests {
         fn assert_error_trait(_: &dyn std::error::Error) {}
         assert_error_trait(&err);
     }
+
+    // LIN-01: PortalNotAvailable error displays user-friendly message
+    #[test]
+    fn test_portal_not_available_display() {
+        let err = AppError::PortalNotAvailable;
+        let msg = err.to_string();
+        assert!(msg.contains("XDG Desktop Portal"), "Error should mention XDG Desktop Portal");
+        assert!(msg.contains("not available"), "Error should mention not available");
+    }
+
+    // LIN-01: PortalPermissionDenied error displays user-friendly message
+    #[test]
+    fn test_portal_permission_denied_display() {
+        let err = AppError::PortalPermissionDenied;
+        let msg = err.to_string();
+        assert!(msg.contains("permission denied"), "Error should mention permission denied");
+        assert!(msg.contains("portal"), "Error should mention portal");
+    }
 }
