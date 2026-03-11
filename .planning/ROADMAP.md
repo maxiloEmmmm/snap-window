@@ -125,7 +125,12 @@
 4. JSON output path follows same logic as `--output` (same base name, .json extension)
 5. JSON contains platform-specific attributes: common fields (window_id, title, pid, app_name, x, y, width, height) plus platform-specific fields (Windows: hwnd, window_class, thread_id; macOS: window_number, owner_name, sharing_state; Linux X11: xid, wm_class, wm_window_role)
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — JSON export module with serde serialization and platform-specific fields (JSON-01, JSON-02, JSON-03, JSON-04, JSON-05, HIL-04)
+- [ ] 05-02-PLAN.md — Platform highlight overlay (red border) and highlight_service orchestration (HIL-01, HIL-02)
+- [ ] 05-03-PLAN.md — Wire highlight mode into main.rs with integration tests and human verification (HIL-01, HIL-02, HIL-03, HIL-04)
 
 ---
 
@@ -137,7 +142,7 @@
 | 2. Window Discovery | 1/2 | In Progress|  |
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
-| 5. Highlight Mode | 0/? | Not started | - |
+| 5. Highlight Mode | 0/3 | Planning complete | - |
 
 ---
 
@@ -180,4 +185,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-11 (Phase 4 complete)*
+*Last updated: 2026-03-11 (Phase 5 planned)*
