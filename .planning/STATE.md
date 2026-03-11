@@ -2,37 +2,37 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 3
-current_plan: Plan 01 complete
-status: in-progress
-last_updated: "2026-03-10T14:14:22.850Z"
+current_phase: 4
+current_plan: 2
+status: executing
+last_updated: "2026-03-11T11:39:08Z"
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 6
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State: snap-window
 
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
-**Current Phase:** 3
-**Current Plan:** Plan 01 complete
-**Status:** In progress
-**Last Updated:** 2026-03-10
+**Current Phase:** 4
+**Current Plan:** 2 of 2
+**Status:** Executing
+**Last Updated:** 2026-03-11
 
 ---
 
 ## Current Position
 
 ```
-[██████████] 100% - Phase 3 Plan 01 complete (6/6 plans complete)
+[██████████] 87% - Phase 4 Plan 01 complete (7/8 plans complete)
 
 Phase 1: Foundation         [██████████] 100% - 3/3 plans complete
 Phase 2: Window Discovery   [██████████] 100% - 2/2 plans complete
 Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
-Phase 4: Screenshot Capture [░░░░░░░░░░] 0% - Not started
+Phase 4: Screenshot Capture [█████░░░░░] 50% - 1/2 plans complete
 Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 ```
 
@@ -80,6 +80,7 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 |------------|----------|-------|-------|
 | Phase 02-window-discovery P02 | 3 min | 3 tasks | 4 files |
 | Phase 03-window-targeting P01 | 4 min | 2 tasks | 4 files |
+| Phase 04-screenshot-capture P01 | 5 min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-10 | Determinism contract via test | Mock implementations validated as deterministic to establish contract for real platform code |
 | 2026-03-10 | window_service as pure function library | Service functions accept &[WindowInfo] slices — testable without binary, no state |
 | 2026-03-10 | find_by_index empty list guard | is_empty() check before computing max index prevents integer underflow panic |
+| 2026-03-11 | xcap 0.9 builds on macOS | No fallback to 0.8 needed, 0.9 compiles and links cleanly |
+| 2026-03-11 | ID correlation u32->u64 cast with title+pid fallback | Robust window matching across xcap and platform APIs |
+| 2026-03-11 | Permission error keyword detection | Lowercase string matching for macOS Screen Recording errors |
 
 ### Open Questions
 
@@ -121,9 +125,9 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 03-01 - window_service module with case-insensitive matching, main.rs delegation refactor, 10 unit tests + 4 updated integration tests
-**Next Action:** Continue Phase 03: Window Targeting or advance to Phase 04
-**Context Valid Until:** 2026-03-11 (assumed)
+**Last Action:** Completed plan 04-01 - capture_service module with xcap 0.9, ID+title+pid correlation, permission error detection, 4 unit tests
+**Next Action:** Execute Phase 04 Plan 02 - wire capture_service into main.rs
+**Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
 
@@ -142,6 +146,7 @@ None currently.
 | 01-foundation | 2026-03-10 | - | Plan 02 complete: Error handling with anyhow/thiserror and dynamic defaults |
 | 01-foundation | 2026-03-10 | - | Plan 03 complete: Cross-platform compilation with conditional compilation and integration tests |
 | 03-window-targeting | 2026-03-10 | 2026-03-10 | Plan 01 complete: window_service module with case-insensitive matching, underflow guard, auto-list delegation |
+| 04-screenshot-capture | 2026-03-11 | - | Plan 01 complete: capture_service with xcap 0.9, ID correlation, permission detection, 4 unit tests |
 
 ---
 

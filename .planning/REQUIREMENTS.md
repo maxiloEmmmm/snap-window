@@ -27,10 +27,10 @@
 
 ### Screenshot Capture
 
-- [ ] **CAP-01**: Capture target window content as PNG
-- [ ] **CAP-02**: PNG encoding with standard compression
+- [x] **CAP-01**: Capture target window content as PNG
+- [x] **CAP-02**: PNG encoding with standard compression
 - [ ] **CAP-03**: Screenshot excludes highlight border (if highlight was shown)
-- [ ] **CAP-04**: Capture respects window bounds (position and dimensions)
+- [x] **CAP-04**: Capture respects window bounds (position and dimensions)
 
 ### Highlight Mode
 
@@ -52,7 +52,7 @@
 - [x] **ERR-01**: Clear error message when target window not found
 - [x] **ERR-02**: Auto-list all available windows on error
 - [x] **ERR-03**: Clear error when platform unsupported
-- [ ] **ERR-04**: Clear error when required permissions missing (macOS Screen Recording)
+- [x] **ERR-04**: Clear error when required permissions missing (macOS Screen Recording)
 
 ## v2 Requirements
 
@@ -98,10 +98,10 @@
 | WIN-04 | Phase 3 | Complete |
 | WIN-05 | Phase 3 | Complete |
 | WIN-06 | Phase 2 | Complete |
-| CAP-01 | Phase 4 | Pending |
-| CAP-02 | Phase 4 | Pending |
+| CAP-01 | Phase 4 | Complete |
+| CAP-02 | Phase 4 | Complete |
 | CAP-03 | Phase 4 | Pending |
-| CAP-04 | Phase 4 | Pending |
+| CAP-04 | Phase 4 | Complete |
 | HIL-01 | Phase 5 | Pending |
 | HIL-02 | Phase 5 | Pending |
 | HIL-03 | Phase 5 | Pending |
@@ -114,7 +114,7 @@
 | ERR-01 | Phase 1 | Complete |
 | ERR-02 | Phase 1 | Complete |
 | ERR-03 | Phase 1 | Complete |
-| ERR-04 | Phase 4 | Pending |
+| ERR-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 30 total
