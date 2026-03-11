@@ -21,6 +21,14 @@ pub enum AppError {
     /// Failed to enumerate windows
     #[error("Failed to enumerate windows: {0}")]
     EnumerationFailed(String),
+
+    /// Window capture failed (non-permission error)
+    #[error("Capture failed: {0}")]
+    CaptureFailed(String),
+
+    /// Screen Recording permission not granted (macOS)
+    #[error("Screen Recording permission required.\nGo to: System Preferences > Privacy & Security > Screen Recording\nEnable access for this terminal application, then retry.\n(Original error: {0})")]
+    PermissionDenied(String),
 }
 
 impl AppError {
@@ -53,6 +61,16 @@ impl AppError {
     /// - Permission denied errors during window enumeration
     pub fn platform_error(msg: impl Into<String>) -> Self {
         Self::EnumerationFailed(msg.into())
+    }
+
+    /// Create a CaptureFailed error with the given message
+    pub fn capture_failed(msg: impl Into<String>) -> Self {
+        Self::CaptureFailed(msg.into())
+    }
+
+    /// Create a PermissionDenied error with the given message
+    pub fn permission_denied(msg: impl Into<String>) -> Self {
+        Self::PermissionDenied(msg.into())
     }
 }
 

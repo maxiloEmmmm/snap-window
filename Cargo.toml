@@ -20,6 +20,7 @@ clap = { version = "4.5", features = ["derive"] }
 anyhow = "1.0"
 thiserror = "1.0"
 chrono = "0.4"
+xcap = "0.9"
 
 [dev-dependencies]
 assert_cmd = "2.0"

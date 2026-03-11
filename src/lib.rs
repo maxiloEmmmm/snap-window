@@ -8,3 +8,4 @@ pub mod error;
 pub mod platform;
 pub mod window;
 pub mod window_service;
+pub mod capture_service;
