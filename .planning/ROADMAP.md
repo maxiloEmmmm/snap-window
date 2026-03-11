@@ -1,9 +1,10 @@
 # Roadmap: snap-window
 
 **Granularity:** Fine
-**Total Phases:** 6
-**Total Requirements:** 36 v1 requirements
+**Total Phases:** 7
+**Total Requirements:** 38 v1/v2 requirements
 **Created:** 2026-03-10
+**Last Updated:** 2026-03-11
 
 ---
 
@@ -15,6 +16,7 @@
 - [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
 - [x] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export (completed 2026-03-11)
 - [~] **Phase 6: Support Regexp Title** - Regular expression pattern matching for window targeting (1/2 plans complete)
+- [ ] **Phase 7: Support Wayland** - Native Wayland support via XDG Desktop Portal with runtime X11/Wayland detection
 
 ---
 
@@ -159,6 +161,31 @@
 
 ---
 
+### Phase 7: Support Wayland
+
+**Goal:** Add native Wayland support via XDG Desktop Portal with runtime detection between X11 and Wayland.
+
+**Depends on:** Phase 6
+
+**Requirements:** LIN-01, LIN-02
+
+**Success Criteria** (what must be TRUE):
+1. Application detects X11 vs Wayland at runtime using environment variables
+2. On Wayland sessions, window enumeration works via foreign-toplevel protocol
+3. On Wayland sessions, screenshot capture works via XDG Desktop Portal
+4. On X11 sessions, existing functionality continues to work unchanged
+5. Clear error messages when portal is unavailable or permission denied
+6. Graceful fallback from Wayland to X11 when possible
+
+**Plans:** 3 plans planned
+
+**Plan list:**
+- [ ] 07-01-PLAN.md — Runtime detection and backend selection (LIN-02) - Refactor linux.rs into backend trait pattern with detector
+- [ ] 07-02-PLAN.md — Wayland window enumeration via foreign-toplevel (LIN-01) - Implement WaylandBackend with wlr-foreign-toplevel protocol
+- [ ] 07-03-PLAN.md — Wayland screenshot capture via XDG Desktop Portal (LIN-01) - Integrate ashpd for portal-based capture
+
+---
+
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
@@ -169,6 +196,7 @@
 | 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 | 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
+| 7. Support Wayland | 0/3 | Planned |  |
 
 ---
 
@@ -191,6 +219,9 @@ Phase 5 (Highlight Mode)
     |
     v
 Phase 6 (Support Regexp Title)
+    |
+    v
+Phase 7 (Support Wayland)
 ```
 
 ---
@@ -206,14 +237,16 @@ Phase 6 (Support Regexp Title)
 | Window Info JSON | JSON-01 to JSON-05 | Phase 5 |
 | Error Handling | ERR-01 to ERR-04 | Phase 1, 3, 4 |
 | Regexp Matching | REGEXP-01 to REGEXP-06 | Phase 6 |
+| Wayland Support | LIN-01, LIN-02 | Phase 7 |
 
 **Total v1 requirements:** 30
 **Total v1.5 requirements (including Phase 6):** 36
-**Mapped to phases:** 36
+**Total v2 requirements (including Phase 7):** 38
+**Mapped to phases:** 38
 **Unmapped:** 0
 
 ---
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-11 (Phase 6 planned)*
+*Last updated: 2026-03-11 (Phase 7 planned)*
