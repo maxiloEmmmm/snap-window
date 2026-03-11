@@ -4,6 +4,8 @@ use clap::Parser;
 mod capture_service;
 mod cli;
 mod error;
+pub mod highlight_service;
+pub mod json_export;
 pub mod platform;
 mod window;
 mod window_service;
@@ -82,19 +84,26 @@ fn run() -> Result<()> {
             let windows = platform::list_windows()
                 .context("Failed to enumerate windows")?;
 
+            // Validate index (highlight_service handles this too, but we need the window ref for JSON)
             if index >= windows.len() {
-                return Err(crate::error::AppError::invalid_index(index, windows.len() - 1))
-                    .with_context(|| {
-                        eprintln!("\nAvailable windows:");
-                        for window in &windows {
-                            eprintln!("  {}", window);
-                        }
-                        format!("Invalid window index {} for highlight", index)
-                    });
+                window_service::print_available_windows(&windows);
+                return Err(crate::error::AppError::invalid_index(index, windows.len().saturating_sub(1)).into());
             }
 
             let window = &windows[index];
-            println!("Would highlight window: {}", window);
+
+            // Show visual highlight (overlay for ~3 seconds)
+            // Errors are non-fatal -- log and continue to JSON export
+            if let Err(e) = platform::show_highlight_border(window) {
+                eprintln!("Warning: Could not display highlight border: {}", e);
+            }
+
+            // Export window info as JSON (this is the persistent output)
+            let json_path = json_export::json_output_path(&output_path);
+            let info_json = json_export::WindowInfoJson::from_window_info(window);
+            json_export::write_json(&info_json, &json_path)?;
+
+            println!("Saved window info to: {}", json_path.display());
         }
         _ => {
             unreachable!("Clap should enforce exactly one mode");

@@ -253,3 +253,115 @@ fn test_capture_custom_output_path_in_success_message() {
     // If capture fails (headless CI, no permission), that is acceptable --
     // the test passes as long as there is no panic
 }
+
+/// Test that invalid highlight index shows error and lists available windows (HIL-01)
+#[test]
+fn test_highlight_invalid_index_shows_error() {
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--highlight").arg("99999");
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Invalid").or(predicate::str::contains("index")))
+        .stderr(predicate::str::contains("Available windows"));
+}
+
+/// Test that --highlight produces a JSON file with window metadata (HIL-03, HIL-04)
+/// Uses dual-outcome pattern: accepts success (JSON created) or graceful failure (no windows)
+#[test]
+fn test_highlight_produces_json_file() {
+    use std::fs;
+
+    let json_path = std::path::PathBuf::from("/tmp/snap_test_highlight.json");
+    let png_path = std::path::PathBuf::from("/tmp/snap_test_highlight.png");
+
+    // Clean up any existing files
+    let _ = fs::remove_file(&json_path);
+    let _ = fs::remove_file(&png_path);
+
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--highlight").arg("0").arg("--output").arg(&png_path);
+    let output = cmd.output().unwrap();
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let stderr = String::from_utf8_lossy(&output.stderr);
+
+    if output.status.success() {
+        // Success case: JSON file should exist
+        assert!(
+            json_path.exists(),
+            "JSON file should be created at {}",
+            json_path.display()
+        );
+
+        // Verify JSON content
+        let json_content = fs::read_to_string(&json_path).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&json_content).unwrap();
+
+        // Verify common fields are present
+        assert!(parsed.get("window_id").is_some(), "JSON should contain window_id");
+        assert!(parsed.get("title").is_some(), "JSON should contain title");
+        assert!(parsed.get("pid").is_some(), "JSON should contain pid");
+        assert!(parsed.get("app_name").is_some(), "JSON should contain app_name");
+        assert!(parsed.get("x").is_some(), "JSON should contain x");
+        assert!(parsed.get("y").is_some(), "JSON should contain y");
+        assert!(parsed.get("width").is_some(), "JSON should contain width");
+        assert!(parsed.get("height").is_some(), "JSON should contain height");
+        assert!(parsed.get("platform").is_some(), "JSON should contain platform");
+
+        // Verify success message
+        assert!(
+            stdout.contains("Saved window info to:"),
+            "Success message should indicate JSON was saved"
+        );
+    } else {
+        // Graceful failure case: either invalid index (no windows) or highlight error
+        // This is acceptable in headless CI environments
+        let has_no_windows = stderr.contains("Invalid") || stderr.contains("index") || stderr.contains("No window");
+        let has_highlight_error = stderr.contains("highlight") || stderr.contains("border");
+        assert!(
+            has_no_windows || has_highlight_error,
+            "Failure should be due to no windows available or highlight error, got stderr: {}",
+            stderr
+        );
+    }
+
+    // Clean up
+    let _ = fs::remove_file(&json_path);
+    let _ = fs::remove_file(&png_path);
+}
+
+/// Test that --highlight does NOT create a PNG file (HIL-03)
+/// Uses dual-outcome pattern: accepts success (no PNG) or graceful failure
+#[test]
+fn test_highlight_no_png_created() {
+    use std::fs;
+
+    let json_path = std::path::PathBuf::from("/tmp/snap_test_no_png.json");
+    let png_path = std::path::PathBuf::from("/tmp/snap_test_no_png.png");
+
+    // Clean up any existing files
+    let _ = fs::remove_file(&json_path);
+    let _ = fs::remove_file(&png_path);
+
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--highlight").arg("0").arg("--output").arg(&png_path);
+    let output = cmd.output().unwrap();
+
+    if output.status.success() {
+        // Success case: PNG should NOT exist, JSON should exist
+        assert!(
+            !png_path.exists(),
+            "PNG file should NOT be created in highlight mode (only JSON)"
+        );
+        assert!(
+            json_path.exists(),
+            "JSON file should be created at {}",
+            json_path.display()
+        );
+    }
+    // If command fails (no windows, headless CI), that's acceptable --
+    // the test passes as long as no PNG was created on success
+
+    // Clean up
+    let _ = fs::remove_file(&json_path);
+    let _ = fs::remove_file(&png_path);
+}
