@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: milestone
 current_phase: 08
-current_plan: 02
+current_plan: 03
 status: in-progress
-last_updated: "2026-03-11T16:24:06Z"
+last_updated: "2026-03-11T16:30:00Z"
 progress:
   total_phases: 8
   completed_phases: 7
   total_plans: 17
-  completed_plans: 17
+  completed_plans: 18
 ---
 
 # Project State: snap-window
@@ -36,7 +36,7 @@ Phase 4: Screenshot Capture      [██████████] 100% - 2/2 pla
 Phase 5: Highlight Mode          [██████████] 100% - 3/3 plans complete
 Phase 6: Support Regexp          [██████████] 100% - 2/2 plans complete
 Phase 7: Support Wayland         [██████████] 100% - 3/3 plans complete
-Phase 8: Wayland Highlight Cleanup [███░░░░░░░] 33% - 1/3 plans complete
+Phase 8: Wayland Highlight Cleanup [██████░░░░] 67% - 2/3 plans complete
 ```
 
 ---
@@ -157,8 +157,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 08-01 - removed dead code from error.rs, fixed unnecessary unsafe blocks in macos.rs
-**Next Action:** Continue with plan 08-02
+**Last Action:** Completed plan 08-02 - implemented Wayland highlight using layer-shell protocol
+**Next Action:** Continue with plan 08-03
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -189,6 +189,7 @@ None currently.
 | 07-support-wayland | 2026-03-11 | - | Plan 02 complete: WaylandBackend with foreign-toplevel protocol, window enumeration on wlroots compositors |
 | 07-support-wayland | 2026-03-11 | - | Plan 03 complete: Wayland screenshot capture via XDG Desktop Portal, LinuxBackend trait extended with capture_window |
 | 08-wayland-highlight-cleanup | 2026-03-11 | - | Plan 01 complete: removed dead code (UnsupportedPlatform variant), fixed unnecessary unsafe blocks in macos.rs, zero targeted warnings |
+| 08-wayland-highlight-cleanup | 2026-03-11 | - | Plan 02 complete: Wayland highlight using layer-shell protocol, red border overlay on wlroots compositors, click-through behavior |
 
 ---
 

@@ -36,7 +36,7 @@
 
 - [x] **HIL-01**: Red border overlay around specified window
 - [x] **HIL-02**: Border is visual only — not included in saved screenshot
-- [ ] **HIL-03**: Highlight mode saves window info as JSON only (no screenshot)
+- [x] **HIL-03**: Highlight mode saves window info as JSON only (no screenshot)
 - [x] **HIL-04**: JSON output path follows same logic as `--output` (same name, .json extension)
 
 ### Window Info JSON
@@ -104,8 +104,8 @@
 | CAP-04 | Phase 4 | Complete |
 | HIL-01 | Phase 5 | Complete |
 | HIL-02 | Phase 5 | Complete |
-| HIL-03 | Phase 5 | Pending |
-| HIL-04 | Phase 5 | Complete |
+| HIL-03 | Phase 5 | Complete |
+| HIL-04 | Phase 8 | Complete |
 | JSON-01 | Phase 5 | Complete |
 | JSON-02 | Phase 5 | Complete |
 | JSON-03 | Phase 5 | Complete |
@@ -124,4 +124,4 @@
 ---
 
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-10 after plan 01-02 complete*
+*Last updated: 2026-03-12 (Phase 8 assigned for HIL-04 gap closure)*

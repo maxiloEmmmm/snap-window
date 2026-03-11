@@ -207,7 +207,7 @@
 
 **Plan list:**
 - [x] 08-01-PLAN.md — Clean up dead code and compiler warnings
-- [ ] 08-02-PLAN.md — Implement Wayland highlight mode using layer-shell protocol (HIL-04)
+- [x] 08-02-PLAN.md — Implement Wayland highlight mode using layer-shell protocol (HIL-04)
 
 ---
 
@@ -222,7 +222,7 @@
 | 5. Highlight Mode | 3/3 | Complete | 2026-03-11 |
 | 6. Support Regexp Title | 2/2 | Complete   | 2026-03-11 |
 | 7. Support Wayland | 3/3 | Complete   | 2026-03-11 |
-| 8. Wayland Highlight | 1/2 | In Progress | 2026-03-11 |
+| 8. Wayland Highlight | 2/2 | In Progress | 2026-03-11 |
 
 ---
 
