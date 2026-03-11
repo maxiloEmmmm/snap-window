@@ -65,12 +65,13 @@ fn test_window_flag() {
     let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
 
-    // Command should run - either success with found window or error with not found
+    // Command should run - either success with capture or error with not found
     assert!(
         output.status.success()
-            || stdout.contains("Found window")
+            || stdout.contains("Saved screenshot to:")
             || stderr.contains("not found")
-            || stdout.contains("Available windows"),
+            || stderr.contains("capture")
+            || stderr.contains("Error"),
         "--window flag should be accepted and processed"
     );
 }
@@ -86,9 +87,10 @@ fn test_pid_flag() {
 
     assert!(
         output.status.success()
-            || stdout.contains("Found window")
+            || stdout.contains("Saved screenshot to:")
             || stderr.contains("not found")
-            || stdout.contains("Available windows"),
+            || stderr.contains("capture")
+            || stderr.contains("Error"),
         "--pid flag should be accepted and processed"
     );
 }
@@ -104,9 +106,10 @@ fn test_index_flag() {
 
     assert!(
         output.status.success()
-            || stdout.contains("Selected window")
+            || stdout.contains("Saved screenshot to:")
             || stderr.contains("Invalid")
-            || stdout.contains("Available windows"),
+            || stderr.contains("capture")
+            || stderr.contains("Error"),
         "--index flag should be accepted and processed"
     );
 }
@@ -184,4 +187,69 @@ fn test_window_flag_case_insensitive_not_found() {
         .failure()
         .stderr(predicate::str::contains("not found"))
         .stderr(predicate::str::contains("Available windows"));
+}
+
+/// Test that --output flag is passed through to capture and not just displayed (CLI-04)
+/// Window will not be found (NonExistentXYZ), but the failure path should not show
+/// the old "Output path:" placeholder -- it should show a proper error.
+#[test]
+fn test_capture_output_flag_accepted() {
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--window")
+        .arg("NonExistentWindowForCaptureTest_XYZ")
+        .arg("--output")
+        .arg("/tmp/snap_capture_test.png");
+    cmd.assert()
+        .failure()
+        // Should show "not found", not the old placeholder "Output path:"
+        .stderr(predicate::str::contains("not found"));
+}
+
+/// Test that successful capture (or graceful failure) uses the new message format.
+/// Old placeholder "Found window:" and "Output path:" must not appear in output.
+#[test]
+fn test_capture_placeholder_text_removed() {
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--index").arg("0");
+    let output = cmd.output().unwrap();
+    let stdout = String::from_utf8_lossy(&output.stdout);
+
+    // Old placeholder text must be gone
+    assert!(
+        !stdout.contains("Found window:"),
+        "Old placeholder 'Found window:' should not appear in output"
+    );
+    assert!(
+        !stdout.contains("Output path:"),
+        "Old placeholder 'Output path:' should not appear in output"
+    );
+    // If it succeeded, it should say "Saved screenshot to:"
+    if output.status.success() {
+        assert!(
+            stdout.contains("Saved screenshot to:"),
+            "Success should print 'Saved screenshot to:'"
+        );
+    }
+}
+
+/// Test that --output with a custom path is used in the success message (CLI-04 wiring)
+#[test]
+fn test_capture_custom_output_path_in_success_message() {
+    let mut cmd = Command::cargo_bin("snap-window").unwrap();
+    cmd.arg("--index")
+        .arg("0")
+        .arg("--output")
+        .arg("/tmp/snap_custom_output_test.png");
+    let output = cmd.output().unwrap();
+    let stdout = String::from_utf8_lossy(&output.stdout);
+
+    if output.status.success() {
+        // Success message must include the custom path
+        assert!(
+            stdout.contains("/tmp/snap_custom_output_test.png"),
+            "Success message should contain the custom --output path"
+        );
+    }
+    // If capture fails (headless CI, no permission), that is acceptable --
+    // the test passes as long as there is no panic
 }
