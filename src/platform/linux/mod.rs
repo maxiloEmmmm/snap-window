@@ -23,6 +23,7 @@ use crate::window::WindowInfo;
 
 pub mod detector;
 pub mod x11;
+pub mod wayland;
 
 use detector::{detect_display_server, DisplayServer};
 
