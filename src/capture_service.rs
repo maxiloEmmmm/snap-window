@@ -19,8 +19,63 @@ use crate::window::WindowInfo;
 /// 3. Check if minimized
 /// 4. Capture image, detecting permission errors
 /// 5. Create parent directories and save PNG
-pub fn capture_window(_info: &WindowInfo, _output: &Path) -> Result<()> {
-    todo!("capture_window not yet implemented")
+pub fn capture_window(info: &WindowInfo, output: &Path) -> Result<()> {
+    let xcap_windows = XCapWindow::all()
+        .context("Failed to enumerate windows for capture")?;
+
+    // ID correlation: xcap returns u32, WindowInfo stores u64; fallback to title+pid if no ID match
+    let xcap_win = xcap_windows
+        .iter()
+        .find(|w| w.id().unwrap_or(0) as u64 == info.window_id)
+        .or_else(|| {
+            xcap_windows.iter().find(|w| {
+                w.title().ok().as_deref() == Some(info.title.as_str())
+                    && w.pid().ok() == Some(info.pid)
+            })
+        })
+        .ok_or_else(|| {
+            anyhow::anyhow!(AppError::capture_failed(format!(
+                "Window '{}' (id={}) not found for capture",
+                info.title, info.window_id
+            )))
+        })?;
+
+    // Check if window is minimized
+    if xcap_win.is_minimized().unwrap_or(false) {
+        return Err(anyhow::anyhow!(AppError::capture_failed(
+            "Cannot capture minimized window — restore the window and retry"
+        )));
+    }
+
+    // Capture image, detecting permission errors
+    let image = match xcap_win.capture_image() {
+        Ok(img) => img,
+        Err(e) => {
+            let msg = e.to_string().to_lowercase();
+            if msg.contains("permission")
+                || msg.contains("screen recording")
+                || msg.contains("not permitted")
+                || msg.contains("access denied")
+            {
+                return Err(anyhow::anyhow!(AppError::permission_denied(e.to_string())));
+            }
+            return Err(anyhow::anyhow!(AppError::capture_failed(e.to_string())));
+        }
+    };
+
+    // Create parent directories if needed
+    if let Some(parent) = output.parent() {
+        if !parent.as_os_str().is_empty() {
+            std::fs::create_dir_all(parent)?;
+        }
+    }
+
+    // Save PNG
+    image
+        .save(output)
+        .with_context(|| format!("Failed to write PNG to {}", output.display()))?;
+
+    Ok(())
 }
 
 #[cfg(test)]
