@@ -12,7 +12,7 @@
 - [~] **Phase 1: Foundation** - Rust project scaffolding, CLI argument parsing, error handling framework (2/3 plans complete)
 - [ ] **Phase 2: Window Discovery** - Cross-platform window enumeration and listing with indices
 - [x] **Phase 3: Window Targeting** - Target windows by name, PID, or index with graceful error handling (completed 2026-03-10)
-- [ ] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths
+- [x] **Phase 4: Screenshot Capture** - Capture target windows as PNG with configurable output paths (completed 2026-03-11)
 - [ ] **Phase 5: Highlight Mode** - Visual window identification with red border and JSON export
 
 ---
@@ -102,11 +102,11 @@
 4. Screenshot excludes any highlight border if highlight was previously shown
 5. On macOS without Screen Recording permission, user sees clear error message directing to System Preferences
 
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 **Plan list:**
-- [ ] 04-01-PLAN.md — capture_service module with error types and TDD unit tests (CAP-01, CAP-02, CAP-04, ERR-04)
-- [ ] 04-02-PLAN.md — Wire capture into main.rs targeting arms and CLI integration tests (CAP-01, CAP-02, CAP-03, CAP-04, CLI-04, CLI-07, ERR-04)
+- [x] 04-01-PLAN.md — capture_service module with error types and TDD unit tests (CAP-01, CAP-02, CAP-04, ERR-04)
+- [x] 04-02-PLAN.md — Wire capture into main.rs targeting arms and CLI integration tests (CAP-01, CAP-02, CAP-03, CAP-04, CLI-04, CLI-07, ERR-04)
 
 ---
 
@@ -136,7 +136,7 @@
 | 1. Foundation | 2/3 | Complete    | 2026-03-10 |
 | 2. Window Discovery | 1/2 | In Progress|  |
 | 3. Window Targeting | 1/1 | Complete   | 2026-03-10 |
-| 4. Screenshot Capture | 0/2 | Not started | - |
+| 4. Screenshot Capture | 2/2 | Complete | 2026-03-11 |
 | 5. Highlight Mode | 0/? | Not started | - |
 
 ---
@@ -180,4 +180,4 @@ Phase 5 (Highlight Mode)
 
 *Roadmap created: 2026-03-10*
 *Ready for planning: yes*
-*Last updated: 2026-03-10 (Phase 4 planned)*
+*Last updated: 2026-03-11 (Phase 4 complete)*

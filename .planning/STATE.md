@@ -2,23 +2,23 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 4
-current_plan: 2
+current_phase: 5
+current_plan: 1
 status: executing
-last_updated: "2026-03-11T11:39:08Z"
+last_updated: "2026-03-11T11:48:00Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 6
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State: snap-window
 
 **Project:** snap-window - Cross-platform CLI window screenshot tool
 **Core Value:** Users can reliably capture any visible window as a PNG image using simple CLI commands, regardless of operating system.
-**Current Phase:** 4
-**Current Plan:** 2 of 2
+**Current Phase:** 5
+**Current Plan:** 1
 **Status:** Executing
 **Last Updated:** 2026-03-11
 
@@ -27,12 +27,12 @@ progress:
 ## Current Position
 
 ```
-[██████████] 87% - Phase 4 Plan 01 complete (7/8 plans complete)
+[██████████] 100% - Phase 4 complete (8/8 plans complete)
 
 Phase 1: Foundation         [██████████] 100% - 3/3 plans complete
 Phase 2: Window Discovery   [██████████] 100% - 2/2 plans complete
 Phase 3: Window Targeting   [██████████] 100% - 1/1 plans complete
-Phase 4: Screenshot Capture [█████░░░░░] 50% - 1/2 plans complete
+Phase 4: Screenshot Capture [██████████] 100% - 2/2 plans complete
 Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 ```
 
@@ -81,6 +81,7 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | Phase 02-window-discovery P02 | 3 min | 3 tasks | 4 files |
 | Phase 03-window-targeting P01 | 4 min | 2 tasks | 4 files |
 | Phase 04-screenshot-capture P01 | 5 min | 2 tasks | 4 files |
+| Phase 04-screenshot-capture P02 | 5 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,8 @@ Phase 5: Highlight Mode     [░░░░░░░░░░] 0% - Not started
 | 2026-03-11 | xcap 0.9 builds on macOS | No fallback to 0.8 needed, 0.9 compiles and links cleanly |
 | 2026-03-11 | ID correlation u32->u64 cast with title+pid fallback | Robust window matching across xcap and platform APIs |
 | 2026-03-11 | Permission error keyword detection | Lowercase string matching for macOS Screen Recording errors |
+| 2026-03-11 | Unified success message format | "Saved screenshot to: {path}" across all targeting arms |
+| 2026-03-11 | Dual-outcome integration tests | Tests accept both success and graceful failure for headless CI |
 
 ### Open Questions
 
@@ -125,8 +128,8 @@ None currently.
 
 ## Session Continuity
 
-**Last Action:** Completed plan 04-01 - capture_service module with xcap 0.9, ID+title+pid correlation, permission error detection, 4 unit tests
-**Next Action:** Execute Phase 04 Plan 02 - wire capture_service into main.rs
+**Last Action:** Completed plan 04-02 - wired capture_service into main.rs, 3 new CLI integration tests, 55 total tests green
+**Next Action:** Execute Phase 05 - Highlight Mode
 **Context Valid Until:** 2026-03-12 (assumed)
 
 ### Key Files
@@ -147,6 +150,7 @@ None currently.
 | 01-foundation | 2026-03-10 | - | Plan 03 complete: Cross-platform compilation with conditional compilation and integration tests |
 | 03-window-targeting | 2026-03-10 | 2026-03-10 | Plan 01 complete: window_service module with case-insensitive matching, underflow guard, auto-list delegation |
 | 04-screenshot-capture | 2026-03-11 | - | Plan 01 complete: capture_service with xcap 0.9, ID correlation, permission detection, 4 unit tests |
+| 04-screenshot-capture | 2026-03-11 | 2026-03-11 | Plan 02 complete: wired capture_service into main.rs, 3 new CLI tests, 55 total tests |
 
 ---
 

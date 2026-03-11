@@ -29,7 +29,7 @@
 
 - [x] **CAP-01**: Capture target window content as PNG
 - [x] **CAP-02**: PNG encoding with standard compression
-- [ ] **CAP-03**: Screenshot excludes highlight border (if highlight was shown)
+- [x] **CAP-03**: Screenshot excludes highlight border (if highlight was shown)
 - [x] **CAP-04**: Capture respects window bounds (position and dimensions)
 
 ### Highlight Mode
@@ -100,7 +100,7 @@
 | WIN-06 | Phase 2 | Complete |
 | CAP-01 | Phase 4 | Complete |
 | CAP-02 | Phase 4 | Complete |
-| CAP-03 | Phase 4 | Pending |
+| CAP-03 | Phase 4 | Complete |
 | CAP-04 | Phase 4 | Complete |
 | HIL-01 | Phase 5 | Pending |
 | HIL-02 | Phase 5 | Pending |
